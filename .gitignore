@@ -1,3 +1,4 @@
 .idea/
-board-with-jsp.iml
 out/
+.DS_Store
+board.iml
