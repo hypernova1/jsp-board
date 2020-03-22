@@ -2,6 +2,7 @@ package board.controller;
 
 import board.dao.PostDao;
 import board.dto.Post;
+import board.reflect.PathReflect;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,9 +21,12 @@ public class FrontController extends HttpServlet {
         String viewPath = "";
 
         if (path.equals("/")) viewPath = "main";
-        else if (path.startsWith("/post")) viewPath = new PostController().execute(request, response);
-        else if (path.startsWith("/comment")) viewPath = new CommentController().execute(request, response);
-        else if (path.startsWith("/member")) viewPath = new MemberController().execute(request, response);
+        else {
+            Controller controller = new PathReflect<Controller>().getController(path);
+            if (controller != null) {
+                controller.execute(request, response);
+            }
+        }
 
 
         if (viewPath.equals("")) {
