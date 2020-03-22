@@ -1,4 +1,4 @@
-package board.dto;
+package board.domain;
 
 public class Post {
 

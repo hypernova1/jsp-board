@@ -1,9 +1,7 @@
 package board.dao;
 
-import board.dto.Post;
+import board.domain.Post;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

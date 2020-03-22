@@ -1,7 +1,7 @@
 package board.service;
 
 import board.dao.PostDao;
-import board.dto.Post;
+import board.domain.Post;
 
 import java.util.List;
 

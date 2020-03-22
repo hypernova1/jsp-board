@@ -1,6 +1,6 @@
 package board.controller;
 
-import board.dto.Post;
+import board.domain.Post;
 import board.service.PostService;
 import board.util.PathUtils;
 

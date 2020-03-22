@@ -1,7 +1,5 @@
 package board.controller;
 
-import board.dao.PostDao;
-import board.dto.Post;
 import board.reflect.PathReflect;
 
 import javax.servlet.ServletException;
