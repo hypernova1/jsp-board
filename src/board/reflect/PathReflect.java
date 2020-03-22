@@ -1,7 +1,5 @@
 package board.reflect;
 
-import java.util.Arrays;
-
 public class PathReflect<T> {
 
 
@@ -9,6 +7,7 @@ public class PathReflect<T> {
 
         T result = null;
 
+        path = path.toLowerCase();
         String rootPath = path.split("/")[1];
         String[] rootPathArr = rootPath.split("");
         rootPath = rootPath.replaceFirst(rootPathArr[0], rootPathArr[0].toUpperCase());

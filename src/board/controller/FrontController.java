@@ -24,7 +24,7 @@ public class FrontController extends HttpServlet {
         else {
             Controller controller = new PathReflect<Controller>().getController(path);
             if (controller != null) {
-                controller.execute(request, response);
+                viewPath = controller.execute(request, response);
             }
         }
 

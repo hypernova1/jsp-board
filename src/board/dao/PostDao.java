@@ -26,11 +26,11 @@ public class PostDao {
         List<String> params = new ArrayList<>();
         params.add(post.getTitle());
         params.add(post.getContent());
-        return jdbcUtil.insert("INSERT INTO board (seq, title, content) VALUES (BOARD_SEQ.NEXTVAL, ?, ?)", params);
+        return jdbcUtil.insert("INSERT INTO post (seq, title, content) VALUES (BOARD_SEQ.NEXTVAL, ?, ?)", params);
     }
 
     public List<Post> selectAll() {
-        return jdbcUtil.selectAll("SELECT * FROM board");
+        return jdbcUtil.selectAll("SELECT * FROM post");
     }
 
     public void update(Post post) {
@@ -38,6 +38,6 @@ public class PostDao {
     }
 
     public Post selectOne(int id) {
-        return jdbcUtil.selectOne("SELECT * FROM board WHERE seq = ?", id);
+        return jdbcUtil.selectOne("SELECT * FROM post WHERE seq = ?", id);
     }
 }

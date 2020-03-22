@@ -37,6 +37,8 @@ public class PostController implements Controller {
             Post post = postService.selectOne(seq);
             request.setAttribute("post", post);
             viewPath = "post/detail";
+        } else if (path.startsWith("/register")) {
+            viewPath = "post/register";
         }
 
         return viewPath;
