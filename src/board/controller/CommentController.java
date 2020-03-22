@@ -3,7 +3,12 @@ package board.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CommentController extends SimpleController {
+public class CommentController implements Controller {
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+        return classifyMethod(request, response);
+    }
 
     @Override
     public String doGet(HttpServletRequest request, HttpServletResponse response) {

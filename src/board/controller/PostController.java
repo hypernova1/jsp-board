@@ -8,12 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class PostController extends SimpleController {
+public class PostController implements Controller {
 
     private final PostService postService;
 
     public PostController() {
         postService = PostService.getInstance();
+    }
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+        return classifyMethod(request, response);
     }
 
     @Override
