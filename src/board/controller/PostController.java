@@ -85,8 +85,15 @@ public class PostController implements Controller {
     }
 
     @RequestMapping(path = "/list")
-    public void getList() {
+    public String getList() {
         System.out.println("1111");
+        return "post/list";
+    }
+
+    @GetMapping(path = "/view")
+    public String getName() {
+        System.out.println(2222);
+        return "post/view";
     }
 
 

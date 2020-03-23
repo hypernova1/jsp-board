@@ -32,7 +32,7 @@ public class RequestHandlerMapping {
             String mappingMethod = null;
 
             if (requestMappingOnClass != null) {
-                mappingPath = requestMappingOnClass.path(); // controller = post, method = list
+                mappingPath = requestMappingOnClass.path();
                 if (requestPath.contains(mappingPath)) {
                      requestPath = requestPath.replace(mappingPath, "");
                      requestPath = requestPath.replace("/", "");
@@ -46,7 +46,6 @@ public class RequestHandlerMapping {
                 Annotation requestMappingOnMethod = getRequestMappingOnMethod(method);
 
                 if (requestMappingOnMethod == null) continue;
-
                 Method[] annotationMethods = requestMappingOnMethod.annotationType().getDeclaredMethods();
                 for (Method annotationMethod : annotationMethods) {
                     try {

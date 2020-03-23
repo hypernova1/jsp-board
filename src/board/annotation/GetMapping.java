@@ -13,4 +13,6 @@ import java.lang.annotation.Target;
 public @interface GetMapping {
 
     String path();
+
+    HttpMethod method() default HttpMethod.GET;
 }

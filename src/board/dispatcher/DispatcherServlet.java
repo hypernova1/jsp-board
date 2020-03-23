@@ -20,18 +20,7 @@ public class DispatcherServlet extends HttpServlet {
         RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
         Map<String, Object> target = requestHandlerMapping.execute(request);
         RequestHandlerAdaptor requestHandlerAdaptor = new RequestHandlerAdaptor();
-        requestHandlerAdaptor.execute(target, request, response);
-
-//        if (requestPath.equals("/")) viewPath = "main";
-//        else {
-//            Controller controller = new PathReflect<Controller>().getController(requestPath);
-//            if (controller != null) {
-//                viewPath = controller.execute(request, response);
-//            }
-//        }
-
-
-
+        viewPath = requestHandlerAdaptor.execute(target, request, response);
 
         if (viewPath.equals("")) {
             request.getRequestDispatcher("/WEB-INF/error/404.jsp").forward(request, response);

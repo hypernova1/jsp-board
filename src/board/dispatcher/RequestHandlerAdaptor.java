@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RequestHandlerAdaptor {
 
-    public void execute(Map<String, Object> target, HttpServletRequest request, HttpServletResponse response) {
+    public String execute(Map<String, Object> target, HttpServletRequest request, HttpServletResponse response) {
 
         Class<?> instance = (Class<?>) target.get("instance");
         Method method = (Method) target.get("method");
@@ -22,7 +22,7 @@ public class RequestHandlerAdaptor {
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
-
+        return result.toString();
 
     }
 
