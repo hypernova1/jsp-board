@@ -1,7 +1,7 @@
 package board.controller;
 
-import board.annotation.GetMapping;
-import board.annotation.RequestMapping;
+import board.annotation.mapping.GetMapping;
+import board.annotation.mapping.RequestMapping;
 import board.domain.Post;
 import board.service.PostService;
 import board.util.PathUtils;
@@ -85,7 +85,7 @@ public class PostController implements Controller {
     }
 
     @RequestMapping(path = "/list")
-    public String getList() {
+    public String getList(Post post, HttpServletRequest request) {
         System.out.println("1111");
         return "post/list";
     }

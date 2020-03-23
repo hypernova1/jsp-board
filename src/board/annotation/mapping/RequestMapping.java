@@ -1,4 +1,4 @@
-package board.annotation;
+package board.annotation.mapping;
 
 import board.constant.HttpMethod;
 

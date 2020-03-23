@@ -1,4 +1,4 @@
-package board.annotation;
+package board.annotation.mapping;
 
 import board.constant.HttpMethod;
 
@@ -9,9 +9,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@RequestMapping(method = HttpMethod.POST)
-public @interface PostMapping {
+@RequestMapping(method = HttpMethod.GET)
+public @interface GetMapping {
 
-    String path() default "";
+    String path();
 
+    HttpMethod method() default HttpMethod.GET;
 }

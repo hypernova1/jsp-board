@@ -1,11 +1,10 @@
 package board.dispatcher;
 
-import board.annotation.RequestMapping;
+import board.annotation.mapping.RequestMapping;
 import board.reflect.ClassReflect;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -21,10 +20,12 @@ public class RequestHandlerMapping {
 
         Map<String, Object> resultMap = new HashMap<>();
 
-        requestPath = requestPath == null ? "/" : requestPath; // /post/list
+        requestPath = requestPath == null ? "/" : requestPath;
+        if (requestPath.endsWith("/")) {
+            requestPath = requestPath.substring(0, requestPath.length() - 1);
+        }
 
         List<Class<?>> controllerClasses = getControllerClass();
-        Class<?> resultController = null;
         for (Class<?> controller : controllerClasses) {
             RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(controller);
 
@@ -35,12 +36,8 @@ public class RequestHandlerMapping {
                 mappingPath = requestMappingOnClass.path();
                 if (requestPath.contains(mappingPath)) {
                      requestPath = requestPath.replace(mappingPath, "");
-                     requestPath = requestPath.replace("/", "");
-                     resultController = controller;
-                     resultMap.put("instance", resultController);
                 }
             }
-
             Method[] methods = controller.getDeclaredMethods();
             for (Method method : methods) {
                 Annotation requestMappingOnMethod = getRequestMappingOnMethod(method);
@@ -50,9 +47,8 @@ public class RequestHandlerMapping {
                 for (Method annotationMethod : annotationMethods) {
                     try {
                         if (annotationMethod.getName().equals("path")) {
-                            mappingPath = annotationMethod.invoke(requestMappingOnMethod).toString().replace("/", "");
+                            mappingPath = annotationMethod.invoke(requestMappingOnMethod).toString();
                         }
-
                         if (annotationMethod.getName().equals("method")) {
                             mappingMethod = annotationMethod.invoke(requestMappingOnMethod).toString();
                         }
@@ -61,8 +57,16 @@ public class RequestHandlerMapping {
                     }
                 }
 
+//                System.out.println(controller.getSimpleName());
+//                System.out.println(requestPath);
+//                System.out.println(mappingPath);
+//                System.out.println(requestPath.equals(mappingPath));
+//                System.out.println(requestMethod);
+//                System.out.println(mappingMethod);
+//                System.out.println(requestMethod.equals(mappingMethod));
                 if (requestPath.equals(mappingPath) && requestMethod.equals(mappingMethod)) {
                     resultMap.put("method", method);
+                    resultMap.put("instance", controller);
                     return resultMap;
                 }
             }
