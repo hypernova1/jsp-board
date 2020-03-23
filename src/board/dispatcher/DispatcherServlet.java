@@ -15,24 +15,16 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String viewPath = "";
-
         RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
         Map<String, Object> target = requestHandlerMapping.execute(request);
         RequestHandlerAdaptor requestHandlerAdaptor = new RequestHandlerAdaptor();
-        viewPath = requestHandlerAdaptor.execute(target, request, response);
+        String viewPath = requestHandlerAdaptor.execute(target, request, response);
 
-        if (viewPath.equals("")) {
-            request.getRequestDispatcher("/WEB-INF/error/404.jsp").forward(request, response);
-            return;
-        }
-        if (viewPath.startsWith("redirect:/")) {
-            response.sendRedirect(viewPath);
-            return;
-        }
-
-        request.getRequestDispatcher("/WEB-INF/"+ viewPath + ".jsp").include(request, response);
+        ViewResolver viewResolver = ViewResolver.getInstance();
+        viewResolver.setPrefix("/WEB-INF/");
+        viewResolver.setSuffix(".jsp");
+        viewResolver.setPath(viewPath);
+        viewResolver.execute(request, response);
     }
-
 
 }

@@ -19,12 +19,12 @@ public class RequestHandlerAdaptor {
         Class<?> instance = (Class<?>) target.get("instance");
         Method method = (Method) target.get("method");
 
-        Converter<?> converter = new Converter<>();
-        Class<?>[] parameters = method.getParameterTypes();
-        for (Class<?> parameter : parameters) {
-            Object param = converter.execute(request, parameter);
-        }
-
+//        Converter<?> converter = new Converter<>();
+//        Class<?>[] parameters = method.getParameterTypes();
+//        for (Class<?> parameter : parameters) {
+//            Object param = converter.execute(request, parameter);
+//        }
+//
         Object result = null;
         try {
             result = method.invoke(instance.newInstance());

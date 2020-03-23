@@ -85,7 +85,7 @@ public class PostController implements Controller {
     }
 
     @RequestMapping(path = "/list")
-    public String getList(Post post, HttpServletRequest request) {
+    public String getList() {
         System.out.println("1111");
         return "post/list";
     }
