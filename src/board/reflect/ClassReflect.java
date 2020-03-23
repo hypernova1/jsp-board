@@ -10,18 +10,25 @@ import java.util.List;
 
 public class ClassReflect {
 
-    public static Class<?>[] getClasses(String packageName) throws NoSuchFieldException, IOException, ClassNotFoundException {
+    public static Class<?>[] getClasses(String packageName) throws ClassNotFoundException {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         assert classLoader != null;
         String path = packageName.replace(".", "/");
-        Enumeration<URL> resources = classLoader.getResources(path);
+        Enumeration<URL> resources = null;
+        try {
+            resources = classLoader.getResources(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         List<File> dir = new ArrayList<>();
-        while (resources.hasMoreElements()) {
-            URL resource = resources.nextElement();
-            dir.add(new File(resource.getFile()));
+        if (resources != null) {
+            while (resources.hasMoreElements()) {
+                URL resource = resources.nextElement();
+                dir.add(new File(resource.getFile()));
+            }
         }
 
         List<Class<?>> classes = new ArrayList<>();

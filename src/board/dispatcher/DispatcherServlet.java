@@ -1,6 +1,4 @@
-package board.controller;
-
-import board.reflect.PathReflect;
+package board.dispatcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,23 +6,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 @WebServlet("/board/*")
-public class FrontController extends HttpServlet {
+public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String path = request.getPathInfo() == null ? "/" : request.getPathInfo();
         String viewPath = "";
 
-        if (path.equals("/")) viewPath = "main";
-        else {
-            Controller controller = new PathReflect<Controller>().getController(path);
-            if (controller != null) {
-                viewPath = controller.execute(request, response);
-            }
-        }
+        RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
+        Method controller = requestHandlerMapping.execute(request.getPathInfo());
+        RequestHandlerAdaptor requestHandlerAdaptor = new RequestHandlerAdaptor();
+        requestHandlerAdaptor.execute(controller);
+
+//        if (requestPath.equals("/")) viewPath = "main";
+//        else {
+//            Controller controller = new PathReflect<Controller>().getController(requestPath);
+//            if (controller != null) {
+//                viewPath = controller.execute(request, response);
+//            }
+//        }
+
+
 
 
         if (viewPath.equals("")) {
@@ -38,4 +43,6 @@ public class FrontController extends HttpServlet {
 
         request.getRequestDispatcher("/WEB-INF/"+ viewPath + ".jsp").include(request, response);
     }
+
+
 }

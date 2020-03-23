@@ -3,6 +3,7 @@ package board.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@board.annotation.Controller
 public class CommentController implements Controller {
 
     @Override
