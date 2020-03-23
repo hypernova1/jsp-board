@@ -3,58 +3,88 @@ package board.dispatcher;
 import board.annotation.RequestMapping;
 import board.reflect.ClassReflect;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class RequestHandlerMapping {
 
     List<String> mappingNames = Arrays.asList("RequestMapping", "GetMapping", "PostMapping", "PutMapping", "DeleteMapping");
 
-    public Method execute(String requestPath) {
+    public Map<String, Object> execute(HttpServletRequest request) {
+
+        String requestPath = request.getPathInfo();
+        String requestMethod = request.getMethod();
+
+        Map<String, Object> resultMap = new HashMap<>();
+
         requestPath = requestPath == null ? "/" : requestPath; // /post/list
 
         List<Class<?>> controllerClasses = getControllerClass();
+        Class<?> resultController = null;
         for (Class<?> controller : controllerClasses) {
-            RequestMapping requestMappingOnClass = getRequestMappingOnClass(controller);
+            RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(controller);
+
             String mappingPath = null;
+            String mappingMethod = null;
+
             if (requestMappingOnClass != null) {
                 mappingPath = requestMappingOnClass.path(); // controller = post, method = list
                 if (requestPath.contains(mappingPath)) {
                      requestPath = requestPath.replace(mappingPath, "");
                      requestPath = requestPath.replace("/", "");
+                     resultController = controller;
+                     resultMap.put("instance", resultController);
                 }
             }
 
             Method[] methods = controller.getDeclaredMethods();
             for (Method method : methods) {
-                RequestMapping requestMappingOnMethod = getRequestMappingOnMethod(method);
+                Annotation requestMappingOnMethod = getRequestMappingOnMethod(method);
+
                 if (requestMappingOnMethod == null) continue;
 
-                mappingPath = requestMappingOnMethod.path().replace("/", "");
-                if (requestPath.equals(mappingPath)) return method;
+                Method[] annotationMethods = requestMappingOnMethod.annotationType().getDeclaredMethods();
+                for (Method annotationMethod : annotationMethods) {
+                    try {
+                        if (annotationMethod.getName().equals("path")) {
+                            mappingPath = annotationMethod.invoke(requestMappingOnMethod).toString().replace("/", "");
+                        }
+
+                        if (annotationMethod.getName().equals("method")) {
+                            mappingMethod = annotationMethod.invoke(requestMappingOnMethod).toString();
+                        }
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (requestPath.equals(mappingPath) && requestMethod.equals(mappingMethod)) {
+                    resultMap.put("method", method);
+                    return resultMap;
+                }
             }
         }
         return null;
     }
 
-    private RequestMapping getRequestMappingOnClass(Class<?> controller) {
+    private Annotation getRequestMappingOnClass(Class<?> controller) {
         Annotation[] annotations = controller.getDeclaredAnnotations();
         return getRequestMapping(annotations);
     }
 
-    private RequestMapping getRequestMappingOnMethod(Method method) {
+    private Annotation getRequestMappingOnMethod(Method method) {
         Annotation[] annotations = method.getDeclaredAnnotations();
         return getRequestMapping(annotations);
     }
 
-    private RequestMapping getRequestMapping(Annotation[] annotations) {
+    private Annotation getRequestMapping(Annotation[] annotations) {
         for (Annotation annotation : annotations) {
             String simpleName = annotation.annotationType().getSimpleName();
-            if (mappingNames.contains(simpleName)) return (RequestMapping) annotation;
+            if (mappingNames.contains(simpleName)) return annotation;
         }
         return null;
     }

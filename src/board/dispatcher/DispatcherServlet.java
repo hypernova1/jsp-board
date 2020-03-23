@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 @WebServlet("/board/*")
 public class DispatcherServlet extends HttpServlet {
@@ -17,9 +18,9 @@ public class DispatcherServlet extends HttpServlet {
         String viewPath = "";
 
         RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
-        Method controller = requestHandlerMapping.execute(request.getPathInfo());
+        Map<String, Object> target = requestHandlerMapping.execute(request);
         RequestHandlerAdaptor requestHandlerAdaptor = new RequestHandlerAdaptor();
-        requestHandlerAdaptor.execute(controller);
+        requestHandlerAdaptor.execute(target, request, response);
 
 //        if (requestPath.equals("/")) viewPath = "main";
 //        else {
