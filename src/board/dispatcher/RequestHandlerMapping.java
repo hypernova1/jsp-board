@@ -34,6 +34,9 @@ public class RequestHandlerMapping {
 
             if (requestMappingOnClass != null) {
                 mappingPath = requestMappingOnClass.value();
+                if (!mappingPath.startsWith("/")) {
+                    mappingPath = "/" + mappingPath;
+                }
                 if (requestPath.contains(mappingPath)) {
                      requestPath = requestPath.replace(mappingPath, "");
                 }
@@ -48,6 +51,9 @@ public class RequestHandlerMapping {
                     try {
                         if (annotationMethod.getName().equals("value")) {
                             mappingPath = annotationMethod.invoke(requestMappingOnMethod).toString();
+                            if (!mappingPath.startsWith("/")) {
+                                mappingPath = "/" + mappingPath;
+                            }
                         }
                         if (annotationMethod.getName().equals("method")) {
                             mappingMethod = annotationMethod.invoke(requestMappingOnMethod).toString();

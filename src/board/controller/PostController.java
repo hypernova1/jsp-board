@@ -29,7 +29,6 @@ public class PostController {
 
     @GetMapping("/view")
     public String getName() {
-        System.out.println(2222);
         return "post/view";
     }
 

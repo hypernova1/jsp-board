@@ -15,7 +15,6 @@ public class HomeController {
     public String toMain(Post post, Model model, HttpServletRequest request, HttpServletResponse response) {
 
         model.setAttribute("title", post.getTitle());
-
         return "/main";
     }
 

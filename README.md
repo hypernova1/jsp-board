@@ -12,6 +12,7 @@
     * ViewResolver
     * DispatcherServlet
     * RequestHandlerMapping
+    * RequestHandlerAdaptor
     * Model
 
 * Annotation

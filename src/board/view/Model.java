@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Model {
 
-    Map<String, Object> attributes;
+    private Map<String, Object> attributes;
 
     public Model() {
         attributes = new HashMap<>();
