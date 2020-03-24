@@ -27,12 +27,13 @@ public class ViewResolver {
         try {
             if (path.equals("")) path = "error/404";
 
-            request.getRequestDispatcher(prefix+ path + suffix).include(request, response);
-
             if (path.startsWith("redirect:/")) {
                 path = path.replace("redirect:/", "");
                 response.sendRedirect(path);
+                return;
             }
+
+            request.getRequestDispatcher(prefix + path + suffix).include(request, response);
         } catch (IOException | ServletException e) {
             e.printStackTrace();
         }
