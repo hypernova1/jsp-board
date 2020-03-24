@@ -2,6 +2,7 @@ package board.controller;
 
 import board.annotation.Controller;
 import board.annotation.mapping.GetMapping;
+import board.annotation.mapping.PostMapping;
 import board.annotation.mapping.PutMapping;
 import board.annotation.mapping.RequestMapping;
 import board.domain.Post;
@@ -30,6 +31,17 @@ public class PostController {
     @GetMapping("/view")
     public String getName() {
         return "post/view";
+    }
+
+    @GetMapping("/register")
+    public String goRegister() {
+        return "post/register";
+    }
+
+    @PostMapping("/")
+    public String registerPost(Post post) {
+
+        return "redirect:post/list";
     }
 
     @PutMapping("/update")

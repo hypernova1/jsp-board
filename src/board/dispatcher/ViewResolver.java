@@ -26,8 +26,8 @@ public class ViewResolver {
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         try {
             if (path.equals("")) path = "error/404";
-            if (path.startsWith("redirect:/")) {
-                path = path.replace("redirect:/", "");
+            if (path.startsWith("redirect:")) {
+                path = path.replace("redirect:", "");
                 response.sendRedirect(path);
                 return;
             }

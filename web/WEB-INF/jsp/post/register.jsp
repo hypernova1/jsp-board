@@ -6,7 +6,7 @@
 </head>
 <body>
 
-    <form action="/board/post/register" method="post">
+    <form action="/board/post" method="post">
         <input name="title">
         <textarea name="content"></textarea>
 
