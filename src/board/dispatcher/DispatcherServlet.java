@@ -17,6 +17,7 @@ public class DispatcherServlet extends HttpServlet {
 
         RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
         Map<String, Object> target = requestHandlerMapping.execute(request);
+
         RequestHandlerAdaptor requestHandlerAdaptor = new RequestHandlerAdaptor();
         String viewPath = requestHandlerAdaptor.execute(target, request, response);
 
