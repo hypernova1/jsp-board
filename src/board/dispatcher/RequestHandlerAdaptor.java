@@ -1,7 +1,5 @@
 package board.dispatcher;
 
-import board.domain.Post;
-import board.exception.ControllerNotFoundException;
 import board.view.Model;
 
 import javax.servlet.http.HttpServletRequest;

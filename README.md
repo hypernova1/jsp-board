@@ -12,17 +12,19 @@
     * ViewResolver
     * DispatcherServlet
     * RequestHandlerMapping
-    * RequestHandlerAdaptor
+    * Model
 
 * Annotation
-    * Controller
-    * RequestMapping (GetMapping, PostMapping 등..)
+    * @Controller
+    * @RequestMapping (@GetMapping, @PostMapping 등..)
     
 
 ## 구현 예정인 기능들
-* PathVariable
-* Jackson을 사용한 RequestBody, ResponseBody
+* IoC Container
+* @PathVariable
+* Jackson을 사용한 @RequestBody, @ResponseBody
 * ResponseEntity
+* 예외처리
 
 ## 구현 가능할지 의문인 기능들
 * **JPA**
