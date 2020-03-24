@@ -11,7 +11,7 @@ import board.view.Model;
 import java.util.List;
 
 @Controller
-@RequestMapping(path = "/post")
+@RequestMapping("/post")
 public class PostController {
 
     private final PostService postService;
@@ -20,20 +20,20 @@ public class PostController {
         postService = PostService.getInstance();
     }
 
-    @RequestMapping(path = "/list")
+    @RequestMapping("/list")
     public String getList(Model model) {
         List<Post> postList = postService.selectAll();
         model.setAttribute("postList", postList);
         return "post/list";
     }
 
-    @GetMapping(path = "/view")
+    @GetMapping("/view")
     public String getName() {
         System.out.println(2222);
         return "post/view";
     }
 
-    @PutMapping(path = "/update")
+    @PutMapping("/update")
     public String updatePost(Post post) {
         post.setSeq(1);
         postService.update(post);

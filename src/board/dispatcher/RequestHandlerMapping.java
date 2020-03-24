@@ -21,7 +21,7 @@ public class RequestHandlerMapping {
         Map<String, Object> resultMap = new HashMap<>();
 
         requestPath = requestPath == null ? "/" : requestPath;
-        if (requestPath.endsWith("/")) {
+        if (!requestPath.equals("/") && requestPath.endsWith("/")) {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
 
@@ -33,7 +33,7 @@ public class RequestHandlerMapping {
             String mappingMethod = null;
 
             if (requestMappingOnClass != null) {
-                mappingPath = requestMappingOnClass.path();
+                mappingPath = requestMappingOnClass.value();
                 if (requestPath.contains(mappingPath)) {
                      requestPath = requestPath.replace(mappingPath, "");
                 }
@@ -46,7 +46,7 @@ public class RequestHandlerMapping {
                 Method[] annotationMethods = requestMappingOnMethod.annotationType().getDeclaredMethods();
                 for (Method annotationMethod : annotationMethods) {
                     try {
-                        if (annotationMethod.getName().equals("path")) {
+                        if (annotationMethod.getName().equals("value")) {
                             mappingPath = annotationMethod.invoke(requestMappingOnMethod).toString();
                         }
                         if (annotationMethod.getName().equals("method")) {

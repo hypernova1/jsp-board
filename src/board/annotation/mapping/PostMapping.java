@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @RequestMapping(method = HttpMethod.POST)
 public @interface PostMapping {
 
-    String path() default "";
+    String value() default "";
 
     HttpMethod method() default HttpMethod.POST;
 

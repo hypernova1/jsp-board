@@ -6,7 +6,7 @@ import board.annotation.mapping.GetMapping;
 @Controller
 public class HomeController {
 
-    @GetMapping(path = "/")
+    @GetMapping("/")
     public String toMain() {
         return "/main";
     }

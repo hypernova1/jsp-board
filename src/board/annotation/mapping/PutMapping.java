@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @RequestMapping(method = HttpMethod.PUT)
 public @interface PutMapping {
 
-    String path() default "";
+    String value() default "";
 
     HttpMethod method() default HttpMethod.PUT;
 

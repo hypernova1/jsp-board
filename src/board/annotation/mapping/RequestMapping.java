@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Inherited
 public @interface RequestMapping {
 
-    String path() default "";
+    String value() default "";
     HttpMethod method() default HttpMethod.GET;
 
 }
