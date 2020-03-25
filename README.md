@@ -14,6 +14,7 @@
     * RequestHandlerMapping
     * RequestHandlerAdaptor
     * Model
+    * BeanContainer
 
 * Annotation
     * @Controller
@@ -21,7 +22,6 @@
     
 
 ## 구현 예정인 기능들
-* IoC Container
 * @PathVariable
 * Jackson을 사용한 @RequestBody, @ResponseBody
 * ResponseEntity

@@ -1,11 +1,9 @@
 package spring.core;
 
-import spring.annotation.Autowired;
 import spring.annotation.component.*;
 import spring.reflect.ClassReflect;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -13,6 +11,7 @@ import java.util.*;
 public class BeanLoader {
 
     private List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
+    private List<Class<?>> controllerType = Arrays.asList(Controller.class, RestController.class);
 
     private Class<?>[] allClasses = new Class[0];
     private Map<String, Class<?>> controllerClasses = new HashMap<>();
@@ -40,11 +39,16 @@ public class BeanLoader {
     private Map<String, Class<?>> initControllerClasses() {
         Map<String, Class<?>> result = new HashMap<>();
         for (Class<?> clazz : allClasses) {
-            if (Objects.nonNull(clazz.getAnnotation(Controller.class))) {
-                String beanName = clazz.getSimpleName();
-                beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
-                result.put(beanName, clazz);
+            Annotation[] declaredAnnotations = clazz.getDeclaredAnnotations();
+
+            for (Annotation annotation : declaredAnnotations) {
+                if (controllerType.contains(annotation.annotationType())) {
+                    String beanName = clazz.getSimpleName();
+                    beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+                    result.put(beanName, clazz);
+                }
             }
+
         }
 
         System.out.println("Controller size = " + result.size());
