@@ -13,16 +13,18 @@ public class BeanLoader {
     private List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
 
     private Class<?>[] allClasses = new Class[0];
+    private List<Class<?>> controllerClasses = new ArrayList<>();
     private List<Class<?>> componentClasses = new ArrayList<>();
-    private Map<String, Object> getBeanInstances = new HashMap<>();
+    private Map<String, Object> beanInstances = new HashMap<>();
 
     private static BeanLoader instance;
 
     private BeanLoader() {
         try {
             allClasses = ClassReflect.getClasses("com");
+            this.controllerClasses = this.initControllerClasses();
             this.componentClasses = this.initComponentClasses();
-            this.getBeanInstances = this.initBeanMethods();
+            this.beanInstances = this.initBeanMethods();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -33,13 +35,15 @@ public class BeanLoader {
         return instance;
     }
 
-    public List<Class<?>> getControllerClasses() {
+    private List<Class<?>> initControllerClasses() {
         List<Class<?>> result = new ArrayList<>();
         for (Class<?> clazz : allClasses) {
             if (Objects.nonNull(clazz.getAnnotation(Controller.class))) {
                 result.add(clazz);
             }
         }
+
+        System.out.println("Controller size = " + result.size());
         return result;
     }
 
@@ -77,6 +81,7 @@ public class BeanLoader {
                 }
             }
         }
+
         System.out.println("Bean size = " + result.size());
         return result;
     }
@@ -85,8 +90,12 @@ public class BeanLoader {
         return this.componentClasses;
     }
 
+    public List<Class<?>> getControllerClasses() {
+        return controllerClasses;
+    }
+
     public Map<String, Object> getBeanInstances() {
-        return this.getBeanInstances;
+        return this.beanInstances;
     }
 
     public Class<?>[] getAllClasses() {

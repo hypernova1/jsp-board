@@ -19,11 +19,13 @@ public class RequestHandlerMapping {
 
     private List<Class<?>> mappingNames = Arrays.asList(RequestMapping.class, GetMapping.class, PostMapping.class, PutMapping.class);
     private BeanLoader beanLoader;
+    private BeanContainer beanContainer;
 
     private static RequestHandlerMapping instance;
 
     private RequestHandlerMapping() {
         beanLoader = BeanLoader.getInstance();
+        beanContainer = BeanContainer.getInstance();
     }
 
     public static RequestHandlerMapping getInstance() {

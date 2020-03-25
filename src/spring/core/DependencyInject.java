@@ -29,8 +29,6 @@ public class DependencyInject {
                     try {
                         String componentName = clazz.getSimpleName();
                         componentName = componentName.substring(0, 1).toLowerCase() + componentName.substring(1);
-                        System.out.println(componentName);
-                        System.out.println(beanContainer.getBean(componentName));
 
                         field.set(beanContainer.getBean(componentName), beanContainer.getBean(field.getName()));
                     } catch (IllegalAccessException e) {
