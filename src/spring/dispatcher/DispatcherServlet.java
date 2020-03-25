@@ -14,10 +14,10 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
+        RequestHandlerMapping requestHandlerMapping = RequestHandlerMapping.getInstance();
         Map<String, Object> target = requestHandlerMapping.execute(request);
 
-        RequestHandlerAdaptor requestHandlerAdaptor = new RequestHandlerAdaptor();
+        RequestHandlerAdaptor requestHandlerAdaptor = RequestHandlerAdaptor.getInstance();
         String viewPath = requestHandlerAdaptor.execute(target, request, response);
 
         ViewResolver viewResolver = new ViewResolver("/WEB-INF/jsp/", ".jsp");

@@ -11,7 +11,14 @@ import java.util.*;
 
 public class RequestHandlerAdaptor {
 
+    private static RequestHandlerAdaptor instance;
 
+    private RequestHandlerAdaptor() {}
+
+    public static RequestHandlerAdaptor getInstance() {
+        if (instance == null) instance = new RequestHandlerAdaptor();
+        return instance;
+    }
 
     public String execute(Map<String, Object> target, HttpServletRequest request, HttpServletResponse response) {
 

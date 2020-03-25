@@ -9,13 +9,14 @@ import spring.view.Model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
+@
 public class HomeController {
 
     BeanContainer beanContainer = BeanContainer.getInstance();
 
     @GetMapping("/")
     public String toMain(Post post, Model model, HttpServletRequest request, HttpServletResponse response) {
+        System.out.println(beanContainer.getBean("hello"));
         model.setAttribute("title", post.getTitle());
         return "/main";
     }
