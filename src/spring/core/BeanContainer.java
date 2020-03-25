@@ -1,18 +1,16 @@
-package spring.dispatcher;
+package spring.core;
 
-import spring.annotation.component.Component;
-import spring.core.BeanLoader;
 import spring.exception.BeanNotFoundException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Component
 public class BeanContainer {
 
     private Map<String, Object> beanMap = new HashMap<>();
+    private Map<String, Object> controllerMap = new HashMap<>();
+    private Map<String, Object> componentMap = new HashMap<>();
 
     private static BeanContainer instance;
 
@@ -34,29 +32,47 @@ public class BeanContainer {
     private void setBeanMap() {
         BeanLoader beanLoader = BeanLoader.getInstance();
 
-        List<Class<?>> controllerClasses = beanLoader.getControllerClasses();
-        List<Class<?>> componentClasses = beanLoader.getComponentClasses();
+        Map<String, Class<?>> controllerClasses = beanLoader.getControllerClasses();
+        Map<String, Class<?>> componentClasses = beanLoader.getComponentClasses();
         insertBean(controllerClasses);
         insertBean(componentClasses);
 
-        Map<String, Object> beanMethods = beanLoader.getBeanInstances();
+        Map<String, Class<?>> beanMethods = beanLoader.getBeanClasses();
         Set<String> keys = beanMethods.keySet();
         for (String key : keys) {
-            beanMap.put(key, beanMethods.get(key));
-        }
-    }
-
-    private void insertBean(List<Class<?>> controllerClasses) {
-        for (Class<?> controllerClass : controllerClasses) {
             try {
-                String beanName = controllerClass.getSimpleName();
-                beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
-                Object beanInstance = controllerClass.newInstance();
-                beanMap.put(beanName, beanInstance);
+                beanMap.put(key, beanMethods.get(key).newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void insertBean(Map<String, Class<?>> classes) {
+
+        Set<String> keys = classes.keySet();
+
+        for (String key : keys) {
+            try {
+                String beanName = classes.get(key).getSimpleName();
+                beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+                Object beanInstance = classes.get(key).newInstance();
+
+                beanMap.put(beanName, beanInstance);
+                controllerMap.put(beanName, beanInstance);
+
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Map<String, Object> getAllBean() {
+        return this.beanMap;
+    }
+
+    public Map<String, Object> getControllerMap() {
+        return this.controllerMap;
     }
 
 }

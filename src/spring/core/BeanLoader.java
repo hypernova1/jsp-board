@@ -1,9 +1,11 @@
 package spring.core;
 
+import spring.annotation.Autowired;
 import spring.annotation.component.*;
 import spring.reflect.ClassReflect;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -13,9 +15,9 @@ public class BeanLoader {
     private List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
 
     private Class<?>[] allClasses = new Class[0];
-    private List<Class<?>> controllerClasses = new ArrayList<>();
-    private List<Class<?>> componentClasses = new ArrayList<>();
-    private Map<String, Object> beanInstances = new HashMap<>();
+    private Map<String, Class<?>> controllerClasses = new HashMap<>();
+    private Map<String, Class<?>> componentClasses = new HashMap<>();
+    private Map<String, Class<?>> beanClasses = new HashMap<>();
 
     private static BeanLoader instance;
 
@@ -24,7 +26,7 @@ public class BeanLoader {
             allClasses = ClassReflect.getClasses("com");
             this.controllerClasses = this.initControllerClasses();
             this.componentClasses = this.initComponentClasses();
-            this.beanInstances = this.initBeanMethods();
+            this.beanClasses = this.initBeanMethods();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -35,11 +37,13 @@ public class BeanLoader {
         return instance;
     }
 
-    private List<Class<?>> initControllerClasses() {
-        List<Class<?>> result = new ArrayList<>();
+    private Map<String, Class<?>> initControllerClasses() {
+        Map<String, Class<?>> result = new HashMap<>();
         for (Class<?> clazz : allClasses) {
             if (Objects.nonNull(clazz.getAnnotation(Controller.class))) {
-                result.add(clazz);
+                String beanName = clazz.getSimpleName();
+                beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+                result.put(beanName, clazz);
             }
         }
 
@@ -47,13 +51,16 @@ public class BeanLoader {
         return result;
     }
 
-    private List<Class<?>> initComponentClasses() {
-        List<Class<?>> result = new ArrayList<>();
+    private Map<String, Class<?>> initComponentClasses() {
+        Map<String, Class<?>> result = new HashMap<>();
         for (Class<?> clazz : allClasses) {
             Annotation[] declaredAnnotations = clazz.getDeclaredAnnotations();
             for (Annotation annotation : declaredAnnotations) {
                 if (componentTypes.contains(annotation.annotationType())) {
-                    result.add(clazz);
+                    String beanName = clazz.getSimpleName();
+                    beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+
+                    result.put(beanName, clazz);
                 }
             }
         }
@@ -62,18 +69,19 @@ public class BeanLoader {
         return result;
     }
 
-    private Map<String, Object> initBeanMethods() {
-        Map<String, Object> result = new HashMap<>();
+    private Map<String, Class<?>> initBeanMethods() {
+        Map<String, Class<?>> result = new HashMap<>();
 
-        for (Class<?> clazz : componentClasses) {
-            Method[] declaredMethods = clazz.getDeclaredMethods();
+        Set<String> keys = componentClasses.keySet();
+        for (String key : keys) {
+            Method[] declaredMethods = componentClasses.get(key).getDeclaredMethods();
             for (Method method : declaredMethods) {
                 Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
                 for (Annotation annotation : declaredAnnotations) {
                     if (annotation.annotationType().equals(Bean.class)) {
                         try {
-                            Object instance = method.invoke(clazz.newInstance());
-                            result.put(method.getName(), instance);
+                            Object instance = method.invoke(componentClasses.get(key).newInstance());
+                            result.put(method.getName(), instance.getClass());
                         } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
                             e.printStackTrace();
                         }
@@ -86,16 +94,16 @@ public class BeanLoader {
         return result;
     }
 
-    public List<Class<?>> getComponentClasses() {
+    public Map<String, Class<?>> getComponentClasses() {
         return this.componentClasses;
     }
 
-    public List<Class<?>> getControllerClasses() {
+    public Map<String, Class<?>> getControllerClasses() {
         return controllerClasses;
     }
 
-    public Map<String, Object> getBeanInstances() {
-        return this.beanInstances;
+    public Map<String, Class<?>> getBeanClasses() {
+        return this.beanClasses;
     }
 
     public Class<?>[] getAllClasses() {

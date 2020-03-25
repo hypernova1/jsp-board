@@ -2,7 +2,7 @@ package spring;
 
 import spring.core.BeanLoader;
 import spring.core.DependencyInject;
-import spring.dispatcher.BeanContainer;
+import spring.core.BeanContainer;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

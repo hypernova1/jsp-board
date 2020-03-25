@@ -1,10 +1,11 @@
 package spring.core;
 
 import spring.annotation.Autowired;
-import spring.dispatcher.BeanContainer;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class DependencyInject {
 
@@ -19,24 +20,31 @@ public class DependencyInject {
     }
 
     public void execute() {
-        Class<?>[] allClasses = beanLoader.getAllClasses();
 
-        for (Class<?> clazz : allClasses) {
-            Field[] declaredFields = clazz.getDeclaredFields();
+        Map<String, Class<?>> componentClasses = beanLoader.getComponentClasses();
+        Map<String, Class<?>> controllerClasses = beanLoader.getControllerClasses();
+        componentClasses.putAll(controllerClasses);
+
+        Set<String> componentNames = componentClasses.keySet();
+
+        for (String componentName : componentNames) {
+            Field[] declaredFields = componentClasses.get(componentName).getDeclaredFields();
+
             for (Field field : declaredFields) {
                 if (Objects.nonNull(field.getAnnotation(Autowired.class))) {
                     field.setAccessible(true);
                     try {
-                        String componentName = clazz.getSimpleName();
-                        componentName = componentName.substring(0, 1).toLowerCase() + componentName.substring(1);
-
-                        field.set(beanContainer.getBean(componentName), beanContainer.getBean(field.getName()));
+                        String beanName = field.getType().getSimpleName();
+                        beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+                        field.set(beanContainer.getBean(componentName), beanContainer.getBean(beanName));
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }
             }
+
         }
+
     }
 
 }

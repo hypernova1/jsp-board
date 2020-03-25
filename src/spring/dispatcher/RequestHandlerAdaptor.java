@@ -28,7 +28,7 @@ public class RequestHandlerAdaptor {
             return "";
         }
 
-        Class<?> clazz = (Class<?>) target.get("instance");
+        Object instance = target.get("instance");
         Method method = (Method) target.get("method");
 
         Converter<?> converter = new Converter<>();
@@ -56,8 +56,8 @@ public class RequestHandlerAdaptor {
 
         Object result = null;
         try {
-            result = method.invoke(clazz.newInstance(), parameterList.toArray(new Object[0]));
-        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            result = method.invoke(instance, parameterList.toArray(new Object[0]));
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
 

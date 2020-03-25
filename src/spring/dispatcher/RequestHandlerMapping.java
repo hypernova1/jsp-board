@@ -4,16 +4,14 @@ import spring.annotation.mapping.GetMapping;
 import spring.annotation.mapping.PostMapping;
 import spring.annotation.mapping.PutMapping;
 import spring.annotation.mapping.RequestMapping;
+import spring.core.BeanContainer;
 import spring.core.BeanLoader;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RequestHandlerMapping {
 
@@ -45,9 +43,12 @@ public class RequestHandlerMapping {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
 
-        List<Class<?>> controllerClasses = beanLoader.getControllerClasses();
-        for (Class<?> controller : controllerClasses) {
-            RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(controller);
+        Map<String, Object> allBean = beanContainer.getControllerMap();
+
+        Set<String> keys = allBean.keySet();
+
+        for (String key : keys) {
+            RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(allBean.get(key).getClass());
 
             String mappingPath = null;
             String mappingMethod = null;
@@ -61,7 +62,7 @@ public class RequestHandlerMapping {
                      requestPath = requestPath.equals("") ? requestPath + "/" : requestPath;
                 }
             }
-            Method[] methods = controller.getDeclaredMethods();
+            Method[] methods = allBean.get(key).getClass().getDeclaredMethods();
             for (Method method : methods) {
                 Annotation requestMappingOnMethod = getRequestMappingOnMethod(method);
 
@@ -83,7 +84,7 @@ public class RequestHandlerMapping {
 
                 if (requestPath.equals(mappingPath) && requestMethod.equals(mappingMethod)) {
                     resultMap.put("method", method);
-                    resultMap.put("instance", controller);
+                    resultMap.put("instance", allBean.get(key));
                     return resultMap;
                 }
             }
