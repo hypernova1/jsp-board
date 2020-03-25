@@ -1,17 +1,25 @@
 package spring.dispatcher;
 
+import spring.annotation.mapping.GetMapping;
+import spring.annotation.mapping.PostMapping;
+import spring.annotation.mapping.PutMapping;
 import spring.annotation.mapping.RequestMapping;
-import spring.reflect.ClassReflect;
+import spring.core.BeanLoader;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RequestHandlerMapping {
 
-    List<String> mappingNames = Arrays.asList("RequestMapping", "GetMapping", "PostMapping", "PutMapping", "DeleteMapping");
+    private List<Class<?>> mappingNames = Arrays.asList(RequestMapping.class, GetMapping.class, PostMapping.class, PutMapping.class);
+    private BeanLoader beanLoader = new BeanLoader();
+
 
     public Map<String, Object> execute(HttpServletRequest request) {
 
@@ -25,7 +33,7 @@ public class RequestHandlerMapping {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
 
-        List<Class<?>> controllerClasses = getControllerClass();
+        List<Class<?>> controllerClasses = beanLoader.getControllerClasses();
         for (Class<?> controller : controllerClasses) {
             RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(controller);
 
@@ -83,27 +91,11 @@ public class RequestHandlerMapping {
 
     private Annotation getRequestMapping(Annotation[] annotations) {
         for (Annotation annotation : annotations) {
-            String simpleName = annotation.annotationType().getSimpleName();
-            if (mappingNames.contains(simpleName)) return annotation;
+            Class<? extends Annotation> annotationType = annotation.annotationType();
+            if (mappingNames.contains(annotationType)) return annotation;
         }
         return null;
     }
 
-    private List<Class<?>> getControllerClass() {
-        Class<?>[] allClasses = new Class[0];
 
-        try {
-            allClasses = ClassReflect.getClasses("com");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        List<Class<?>> result = new ArrayList<>();
-        for (Class<?> clazz : allClasses) {
-            if (Objects.nonNull(clazz.getAnnotation(spring.annotation.Controller.class))) {
-                result.add(clazz);
-            }
-        }
-        return result;
-    }
 }

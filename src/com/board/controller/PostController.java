@@ -2,7 +2,7 @@ package com.board.controller;
 
 import com.board.domain.Post;
 import com.board.service.PostService;
-import spring.annotation.Controller;
+import spring.annotation.component.Controller;
 import spring.annotation.mapping.GetMapping;
 import spring.annotation.mapping.PostMapping;
 import spring.annotation.mapping.PutMapping;

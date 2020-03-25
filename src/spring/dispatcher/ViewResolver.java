@@ -11,14 +11,9 @@ public class ViewResolver {
     private String suffix;
     private String path;
 
-    private static ViewResolver instance;
-
-    private ViewResolver() {
-    }
-
-    public static ViewResolver getInstance() {
-        if (instance == null) instance = new ViewResolver();
-        return instance;
+    public ViewResolver(String prefix, String suffix) {
+        this.prefix = prefix;
+        this.suffix = suffix;
     }
 
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -34,14 +29,6 @@ public class ViewResolver {
         } catch (IOException | ServletException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
     }
 
     public void setPath(String path) {
