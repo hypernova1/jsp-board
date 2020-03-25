@@ -33,25 +33,30 @@ public class BeanContainer {
 
     private void setBeanMap() {
         BeanLoader beanLoader = BeanLoader.getInstance();
-        List<Class<?>> componentClasses = beanLoader.getComponentClasses();
 
-        for (Class<?> componentClass : componentClasses) {
-            try {
-                String beanName = componentClass.getSimpleName();
-                beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
-                Object beanInstance = componentClass.newInstance();
-                beanMap.put(beanName, beanInstance);
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
+        List<Class<?>> controllerClasses = beanLoader.getControllerClasses();
+        List<Class<?>> componentClasses = beanLoader.getComponentClasses();
+        insertBean(controllerClasses);
+        insertBean(componentClasses);
 
         Map<String, Object> beanMethods = beanLoader.getBeanInstances();
         Set<String> keys = beanMethods.keySet();
         for (String key : keys) {
             beanMap.put(key, beanMethods.get(key));
         }
+    }
 
+    private void insertBean(List<Class<?>> controllerClasses) {
+        for (Class<?> controllerClass : controllerClasses) {
+            try {
+                String beanName = controllerClass.getSimpleName();
+                beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+                Object beanInstance = controllerClass.newInstance();
+                beanMap.put(beanName, beanInstance);
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

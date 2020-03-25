@@ -2,6 +2,7 @@ package com.board.controller;
 
 import com.board.domain.Post;
 import com.board.service.PostService;
+import spring.annotation.Autowired;
 import spring.annotation.component.Controller;
 import spring.annotation.mapping.GetMapping;
 import spring.annotation.mapping.PostMapping;
@@ -15,11 +16,8 @@ import java.util.List;
 @RequestMapping("/post")
 public class PostController {
 
-    private final PostService postService;
-
-    public PostController() {
-        postService = PostService.getInstance();
-    }
+    @Autowired
+    private PostService postService;
 
     @RequestMapping("/list")
     public String getList(Model model) {

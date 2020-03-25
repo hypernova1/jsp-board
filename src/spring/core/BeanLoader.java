@@ -89,4 +89,7 @@ public class BeanLoader {
         return this.getBeanInstances;
     }
 
+    public Class<?>[] getAllClasses() {
+        return this.allClasses;
+    }
 }
