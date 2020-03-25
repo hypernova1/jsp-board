@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class HomeController {
 
-    BeanContainer beanContainer = new BeanContainer();
+    BeanContainer beanContainer = BeanContainer.getInstance();
 
     @GetMapping("/")
     public String toMain(Post post, Model model, HttpServletRequest request, HttpServletResponse response) {

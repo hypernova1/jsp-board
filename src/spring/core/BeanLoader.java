@@ -16,7 +16,9 @@ public class BeanLoader {
     private List<Class<?>> componentClasses = new ArrayList<>();
     private Map<String, Object> getBeanInstances = new HashMap<>();
 
-    public BeanLoader() {
+    private static BeanLoader instance;
+
+    private BeanLoader() {
         try {
             allClasses = ClassReflect.getClasses("com");
             this.componentClasses = this.initComponentClasses();
@@ -24,6 +26,11 @@ public class BeanLoader {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static BeanLoader getInstance() {
+        if (instance == null) instance = new BeanLoader();
+        return instance;
     }
 
     public List<Class<?>> getControllerClasses() {

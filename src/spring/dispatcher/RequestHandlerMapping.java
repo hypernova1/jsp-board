@@ -18,8 +18,7 @@ import java.util.Map;
 public class RequestHandlerMapping {
 
     private List<Class<?>> mappingNames = Arrays.asList(RequestMapping.class, GetMapping.class, PostMapping.class, PutMapping.class);
-    private BeanLoader beanLoader = new BeanLoader();
-
+    private BeanLoader beanLoader = BeanLoader.getInstance();
 
     public Map<String, Object> execute(HttpServletRequest request) {
 

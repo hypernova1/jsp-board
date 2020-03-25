@@ -14,8 +14,6 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        BeanContainer beanContainer = new BeanContainer();
-
         RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
         Map<String, Object> target = requestHandlerMapping.execute(request);
 

@@ -12,10 +12,17 @@ import java.util.Set;
 @Component
 public class BeanContainer {
 
-    Map<String, Object> beanMap = new HashMap<>();
+    private Map<String, Object> beanMap = new HashMap<>();
 
-    public BeanContainer() {
+    private static BeanContainer instance;
+
+    private BeanContainer() {
         this.setBeanMap();
+    }
+
+    public static BeanContainer getInstance() {
+        if (instance == null) instance = new BeanContainer();
+        return instance;
     }
 
     public Object getBean(String beanName) {
@@ -25,7 +32,7 @@ public class BeanContainer {
     }
 
     private void setBeanMap() {
-        BeanLoader beanLoader = new BeanLoader();
+        BeanLoader beanLoader = BeanLoader.getInstance();
         List<Class<?>> componentClasses = beanLoader.getComponentClasses();
 
         for (Class<?> componentClass : componentClasses) {
