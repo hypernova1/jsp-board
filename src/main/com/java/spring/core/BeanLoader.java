@@ -21,7 +21,7 @@ public class BeanLoader {
 
     private BeanLoader() {
         try {
-            allClasses = ClassLoader.getClasses("com");
+            allClasses = ClassLoader.getClasses("board");
             this.controllerClasses = this.initComponentClasses(controllerType);
             this.componentClasses = this.initComponentClasses(componentTypes);
             this.beanClasses = this.initBeanMethods();

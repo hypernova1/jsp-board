@@ -1,6 +1,6 @@
-package java.board.dao;
+package board.dao;
 
-import java.board.domain.Post;
+import board.domain.Post;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ public class PostDao {
 
     private static PostDao postDao = null;
 
-    private java.board.dao.JdbcUtil jdbcUtil = null;
+    private JdbcUtil jdbcUtil = null;
 
     public PostDao() {
-        this.jdbcUtil = java.board.dao.JdbcUtil.getInstance();
+        this.jdbcUtil = jdbcUtil.getInstance();
     }
 
     public static PostDao getInstance() {

@@ -1,7 +1,7 @@
-package java.board.service;
+package board.service;
 
-import java.board.dao.PostDao;
-import java.board.domain.Post;
+import board.dao.PostDao;
+import board.domain.Post;
 import spring.annotation.component.Service;
 
 import java.util.List;

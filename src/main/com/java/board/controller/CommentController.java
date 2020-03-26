@@ -1,4 +1,4 @@
-package java.board.controller;
+package board.controller;
 
 import spring.annotation.component.Controller;
 

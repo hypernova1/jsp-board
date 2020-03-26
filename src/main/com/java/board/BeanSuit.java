@@ -1,4 +1,4 @@
-package java.board;
+package board;
 
 import spring.annotation.component.Bean;
 import spring.annotation.component.Component;

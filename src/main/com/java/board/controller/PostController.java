@@ -1,7 +1,7 @@
-package java.board.controller;
+package board.controller;
 
-import java.board.domain.Post;
-import java.board.service.PostService;
+import board.domain.Post;
+import board.service.PostService;
 import spring.annotation.Autowired;
 import spring.annotation.component.Controller;
 import spring.annotation.mapping.GetMapping;

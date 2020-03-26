@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com</groupId>
-    <artifactId>board</artifactId>
+    <artifactId>java</artifactId>
     <name>Mini-Springframework</name>
     <version>1.0</version>
     <packaging>war</packaging>

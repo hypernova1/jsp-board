@@ -1,4 +1,4 @@
-package java.board.domain;
+package board.domain;
 
 public class Post {
 

@@ -1,6 +1,6 @@
-package java.board.service;
+package board.service;
 
-import java.board.domain.Post;
+import board.domain.Post;
 
 import java.util.List;
 

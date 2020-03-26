@@ -1,7 +1,6 @@
-package java.board.controller;
+package board.controller;
 
-import java.board.domain.Post;
-import spring.annotation.component.Controller;
+import board.domain.Post;
 import spring.annotation.component.RestController;
 import spring.annotation.mapping.GetMapping;
 import spring.view.Model;
