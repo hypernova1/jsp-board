@@ -40,12 +40,12 @@ public class RequestHandlerMapping implements HandlerMapping {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
 
-        Map<String, Object> allBean = beanContainer.getControllerMap();
+        Map<String, Object> controllers = beanContainer.getControllerMap();
 
-        Set<String> keys = allBean.keySet();
+        Set<String> keys = controllers.keySet();
 
         for (String key : keys) {
-            RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(allBean.get(key).getClass());
+            RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(controllers.get(key).getClass());
 
             String mappingPath = null;
             String mappingMethod = null;
@@ -59,7 +59,7 @@ public class RequestHandlerMapping implements HandlerMapping {
                      requestPath = requestPath.equals("") ? requestPath + "/" : requestPath;
                 }
             }
-            Method[] methods = allBean.get(key).getClass().getDeclaredMethods();
+            Method[] methods = controllers.get(key).getClass().getDeclaredMethods();
             for (Method method : methods) {
                 Annotation requestMappingOnMethod = getRequestMappingOnMethod(method);
 
@@ -81,7 +81,7 @@ public class RequestHandlerMapping implements HandlerMapping {
 
                 if (requestPath.equals(mappingPath) && requestMethod.equals(mappingMethod)) {
                     resultMap.put("method", method);
-                    resultMap.put("instance", allBean.get(key));
+                    resultMap.put("instance", controllers.get(key));
                     return resultMap;
                 }
             }

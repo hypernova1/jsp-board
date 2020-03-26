@@ -1,7 +1,7 @@
 package com.spring.web;
 
-import com.spring.view.Model;
 import com.spring.common.Converter;
+import com.spring.view.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,7 +53,6 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
                 }
             }
             if (parameter.getType().isPrimitive()) {
-                System.out.println(parameter.getName());
                 parameterList.add(request.getParameter(parameter.getName()));
                 continue;
             }

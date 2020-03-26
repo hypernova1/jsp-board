@@ -58,7 +58,6 @@ public class BeanContainer {
     private void insertBean(Map<String, Class<?>> classes) {
 
         Set<String> keys = classes.keySet();
-
         for (String key : keys) {
             try {
                 String beanName = classes.get(key).getSimpleName();
