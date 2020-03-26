@@ -1,7 +1,5 @@
 package spring.core;
 
-import spring.exception.BeanNotFoundException;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +8,6 @@ public class BeanContainer {
 
     private Map<String, Object> beanMap = new HashMap<>();
     private Map<String, Object> controllerMap = new HashMap<>();
-    private Map<String, Object> componentMap = new HashMap<>();
 
     private static BeanContainer instance;
 
@@ -23,10 +20,20 @@ public class BeanContainer {
         return instance;
     }
 
-    public Object getBean(String beanName) {
-        Object bean = beanMap.get(beanName);
-        if (bean == null) throw new BeanNotFoundException(beanName);
-        return bean;
+    public Object getBeanToBeanName(String beanName) {
+        return beanMap.get(beanName);
+    }
+
+    public Object getBeanToBeanType(Class<?> type) {
+        Set<String> beanNames = beanMap.keySet();
+        for (String beanName : beanNames) {
+            Object bean = beanMap.get(beanName);
+            Class<?> beanType = bean.getClass();
+
+            if (type.isAssignableFrom(beanType)) return bean;
+        }
+
+        return null;
     }
 
     private void setBeanMap() {

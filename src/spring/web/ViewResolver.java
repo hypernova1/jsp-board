@@ -25,7 +25,6 @@ public class ViewResolver {
                 return;
             }
 
-            System.out.println(prefix + path + suffix);
             request.getRequestDispatcher(prefix + path + suffix).include(request, response);
         } catch (IOException | ServletException e) {
             e.printStackTrace();

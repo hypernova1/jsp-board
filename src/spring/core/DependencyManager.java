@@ -1,6 +1,7 @@
 package spring.core;
 
 import spring.annotation.Autowired;
+import spring.exception.BeanNotFoundException;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -34,17 +35,35 @@ public class DependencyManager {
                 if (Objects.nonNull(field.getAnnotation(Autowired.class))) {
                     field.setAccessible(true);
                     try {
-                        String beanName = field.getType().getSimpleName();
-                        beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
-                        field.set(beanContainer.getBean(componentName), beanContainer.getBean(beanName));
+                        boolean result = injectionToBeanName(componentName, field);
+                        if (!result) throw new BeanNotFoundException(componentName);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }
             }
+        }
+    }
 
+    private boolean injectionToBeanName(String componentName, Field field) throws IllegalAccessException {
+        String beanName = field.getType().getSimpleName();
+        beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+
+        Object bean = beanContainer.getBeanToBeanName(beanName);
+        if (!Objects.nonNull(bean)) {
+            bean = injectionToBeanType(field.getType());
         }
 
+        field.set(beanContainer.getBeanToBeanName(componentName), bean);
+        return true;
+    }
+
+    private Object injectionToBeanType(Class<?> fieldType) {
+        Object bean = beanContainer.getBeanToBeanType(fieldType);
+        if (bean == null) {
+            bean = injectionToBeanType(fieldType.getSuperclass());
+        }
+        return bean;
     }
 
 }
