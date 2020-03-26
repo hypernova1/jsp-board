@@ -15,7 +15,11 @@
 
     <c:forEach items="${postList}" var="item">
         <tr>
-            <td>${item.content}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/board/post/view?seq=${item.seq}">
+                    ${item.content}
+                </a>
+            </td>
             <td>${item.title}</td>
             <td></td>
         </tr>

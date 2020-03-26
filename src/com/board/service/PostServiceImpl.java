@@ -7,7 +7,7 @@ import spring.annotation.component.Service;
 import java.util.List;
 
 @Service
-public class PostServiceImpl extends PostService {
+public class PostServiceImpl implements PostService {
 
     private final PostDao postDao;
     private static PostServiceImpl instance;

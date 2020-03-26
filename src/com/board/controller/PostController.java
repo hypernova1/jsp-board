@@ -1,9 +1,7 @@
 package com.board.controller;
 
 import com.board.domain.Post;
-import com.board.service.PostSe;
 import com.board.service.PostService;
-import com.board.service.PostServiceImpl;
 import spring.annotation.Autowired;
 import spring.annotation.component.Controller;
 import spring.annotation.mapping.GetMapping;
@@ -19,7 +17,7 @@ import java.util.List;
 public class PostController {
 
     @Autowired
-    private PostSe postService;
+    private PostService postService;
 
     @RequestMapping("/list")
     public String getList(Model model) {
@@ -29,18 +27,21 @@ public class PostController {
     }
 
     @GetMapping("/view")
-    public String getName() {
+    public String getName(String seq, Model model) {
+        System.out.println(seq);
+//        Post post = postService.selectOne(seq);
+//        model.setAttribute("post", post);
         return "post/view";
     }
 
     @GetMapping("/register")
-    public String goRegister() {
+    public String goRegister(Post post) {
         return "post/register";
     }
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public String registerPost(Post post) {
-
+        postService.insert(post);
         return "redirect:post/list";
     }
 
