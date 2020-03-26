@@ -1,14 +1,14 @@
 package board.controller;
 
-import board.domain.Post;
-import board.service.PostService;
-import spring.annotation.Autowired;
-import spring.annotation.component.Controller;
-import spring.annotation.mapping.GetMapping;
-import spring.annotation.mapping.PostMapping;
-import spring.annotation.mapping.PutMapping;
-import spring.annotation.mapping.RequestMapping;
-import spring.view.Model;
+import com.board.domain.Post;
+import com.board.service.PostService;
+import com.spring.annotation.Autowired;
+import com.spring.annotation.component.Controller;
+import com.spring.annotation.mapping.GetMapping;
+import com.spring.annotation.mapping.PostMapping;
+import com.spring.annotation.mapping.PutMapping;
+import com.spring.annotation.mapping.RequestMapping;
+import com.spring.view.Model;
 
 import java.util.List;
 

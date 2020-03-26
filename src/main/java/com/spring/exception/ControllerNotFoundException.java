@@ -1,4 +1,4 @@
-package spring.exception;
+package com.spring.exception;
 
 public class ControllerNotFoundException extends RuntimeException {
 

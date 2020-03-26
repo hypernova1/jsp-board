@@ -1,4 +1,4 @@
-package spring.web;
+package com.spring.web;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

@@ -1,4 +1,4 @@
-package spring.common;
+package com.spring.common;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;

@@ -1,7 +1,7 @@
-package spring.web;
+package com.spring.web;
 
-import spring.common.Converter;
-import spring.view.Model;
+import com.spring.view.Model;
+import com.spring.common.Converter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,7 +78,7 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
 
     private void setParameterForModel(Model model, HttpServletRequest request) {
 
-        Field modelAttributes = null;
+        Field modelAttributes;
         try {
             modelAttributes = model.getClass().getDeclaredField("attributes");
             modelAttributes.setAccessible(true);

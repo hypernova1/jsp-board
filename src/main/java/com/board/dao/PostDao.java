@@ -1,6 +1,7 @@
-package board.dao;
+package com.board.dao;
 
-import board.domain.Post;
+import com.board.domain.Post;
+import com.board.dao.JdbcUtil;
 
 import java.util.ArrayList;
 import java.util.List;

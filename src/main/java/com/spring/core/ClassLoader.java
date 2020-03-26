@@ -1,4 +1,4 @@
-package spring.core;
+package com.spring.core;
 
 import java.io.File;
 import java.io.IOException;

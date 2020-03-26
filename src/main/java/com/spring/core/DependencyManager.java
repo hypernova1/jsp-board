@@ -1,7 +1,7 @@
-package spring.core;
+package com.spring.core;
 
-import spring.annotation.Autowired;
-import spring.exception.BeanNotFoundException;
+import com.spring.annotation.Autowired;
+import com.spring.exception.BeanNotFoundException;
 
 import java.lang.reflect.Field;
 import java.util.Map;

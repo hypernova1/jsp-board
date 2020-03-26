@@ -1,6 +1,6 @@
-package spring.annotation.mapping;
+package com.spring.annotation.mapping;
 
-import spring.constant.HttpMethod;
+import com.spring.constant.HttpMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

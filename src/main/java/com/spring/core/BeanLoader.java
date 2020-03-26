@@ -1,6 +1,6 @@
-package spring.core;
+package com.spring.core;
 
-import spring.annotation.component.*;
+import com.spring.annotation.component.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;

@@ -1,14 +1,15 @@
 package com.board.controller;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PostControllerTest {
+class PostControllerTest extends Mockito {
 
     @Test
     void test() {
-        System.out.println("test");
+
     }
 
 }

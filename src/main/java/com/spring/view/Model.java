@@ -1,4 +1,4 @@
-package spring.view;
+package com.spring.view;
 
 import java.util.HashMap;
 import java.util.Map;

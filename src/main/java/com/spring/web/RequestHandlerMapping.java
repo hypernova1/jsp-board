@@ -1,10 +1,10 @@
-package spring.web;
+package com.spring.web;
 
-import spring.annotation.mapping.GetMapping;
-import spring.annotation.mapping.PostMapping;
-import spring.annotation.mapping.PutMapping;
-import spring.annotation.mapping.RequestMapping;
-import spring.core.BeanContainer;
+import com.spring.annotation.mapping.GetMapping;
+import com.spring.annotation.mapping.PostMapping;
+import com.spring.annotation.mapping.PutMapping;
+import com.spring.annotation.mapping.RequestMapping;
+import com.spring.core.BeanContainer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;

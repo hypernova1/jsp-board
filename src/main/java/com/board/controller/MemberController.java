@@ -1,6 +1,6 @@
-package java.board.controller;
+package com.board.controller;
 
-import spring.annotation.component.Controller;
+import com.spring.annotation.component.Controller;
 
 @Controller
 public class MemberController {

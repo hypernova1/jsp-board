@@ -1,4 +1,4 @@
-package spring.common;
+package com.spring.common;
 
 public class PathUtils {
 

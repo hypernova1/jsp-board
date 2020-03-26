@@ -1,9 +1,9 @@
-package board.controller;
+package com.board.controller;
 
-import board.domain.Post;
-import spring.annotation.component.RestController;
-import spring.annotation.mapping.GetMapping;
-import spring.view.Model;
+import com.board.domain.Post;
+import com.spring.annotation.component.RestController;
+import com.spring.annotation.mapping.GetMapping;
+import com.spring.view.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

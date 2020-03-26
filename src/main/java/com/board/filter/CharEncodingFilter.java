@@ -1,4 +1,4 @@
-package board.filter;
+package com.board.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

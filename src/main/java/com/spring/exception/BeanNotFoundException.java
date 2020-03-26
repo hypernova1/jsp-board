@@ -1,4 +1,4 @@
-package spring.exception;
+package com.spring.exception;
 
 public class BeanNotFoundException extends RuntimeException {
     public BeanNotFoundException(String beanName) {

@@ -1,7 +1,7 @@
-package board;
+package com.board;
 
-import spring.annotation.component.Bean;
-import spring.annotation.component.Component;
+import com.spring.annotation.component.Bean;
+import com.spring.annotation.component.Component;
 
 @Component
 public class BeanSuit {
