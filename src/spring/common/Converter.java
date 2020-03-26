@@ -1,4 +1,4 @@
-package spring.dispatcher;
+package spring.common;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;

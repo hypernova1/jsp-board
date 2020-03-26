@@ -1,11 +1,10 @@
-package spring.dispatcher;
+package spring.web;
 
 import spring.annotation.mapping.GetMapping;
 import spring.annotation.mapping.PostMapping;
 import spring.annotation.mapping.PutMapping;
 import spring.annotation.mapping.RequestMapping;
 import spring.core.BeanContainer;
-import spring.core.BeanLoader;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
@@ -13,16 +12,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class RequestHandlerMapping {
+public class RequestHandlerMapping implements HandlerMapping {
 
     private List<Class<?>> mappingNames = Arrays.asList(RequestMapping.class, GetMapping.class, PostMapping.class, PutMapping.class);
-    private BeanLoader beanLoader;
     private BeanContainer beanContainer;
 
     private static RequestHandlerMapping instance;
 
     private RequestHandlerMapping() {
-        beanLoader = BeanLoader.getInstance();
         beanContainer = BeanContainer.getInstance();
     }
 
@@ -31,7 +28,7 @@ public class RequestHandlerMapping {
         return instance;
     }
 
-    public Map<String, Object> execute(HttpServletRequest request) {
+    public Map<String, Object> getHandler(HttpServletRequest request) {
 
         String requestPath = request.getPathInfo();
         String requestMethod = request.getMethod();

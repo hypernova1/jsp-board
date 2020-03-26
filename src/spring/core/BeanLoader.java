@@ -1,7 +1,6 @@
 package spring.core;
 
 import spring.annotation.component.*;
-import spring.reflect.ClassReflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -10,8 +9,8 @@ import java.util.*;
 
 public class BeanLoader {
 
-    private List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
-    private List<Class<?>> controllerType = Arrays.asList(Controller.class, RestController.class);
+    private final List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
+    private final List<Class<?>> controllerType = Arrays.asList(Controller.class, RestController.class);
 
     private Class<?>[] allClasses = new Class[0];
     private Map<String, Class<?>> controllerClasses = new HashMap<>();
@@ -22,9 +21,9 @@ public class BeanLoader {
 
     private BeanLoader() {
         try {
-            allClasses = ClassReflect.getClasses("com");
-            this.controllerClasses = this.initControllerClasses();
-            this.componentClasses = this.initComponentClasses();
+            allClasses = ClassLoader.getClasses("com");
+            this.controllerClasses = this.initComponentClasses(controllerType);
+            this.componentClasses = this.initComponentClasses(componentTypes);
             this.beanClasses = this.initBeanMethods();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -36,26 +35,7 @@ public class BeanLoader {
         return instance;
     }
 
-    private Map<String, Class<?>> initControllerClasses() {
-        Map<String, Class<?>> result = new HashMap<>();
-        for (Class<?> clazz : allClasses) {
-            Annotation[] declaredAnnotations = clazz.getDeclaredAnnotations();
-
-            for (Annotation annotation : declaredAnnotations) {
-                if (controllerType.contains(annotation.annotationType())) {
-                    String beanName = clazz.getSimpleName();
-                    beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
-                    result.put(beanName, clazz);
-                }
-            }
-
-        }
-
-        System.out.println("Controller size = " + result.size());
-        return result;
-    }
-
-    private Map<String, Class<?>> initComponentClasses() {
+    private Map<String, Class<?>> initComponentClasses(List<Class<?>> componentTypes) {
         Map<String, Class<?>> result = new HashMap<>();
         for (Class<?> clazz : allClasses) {
             Annotation[] declaredAnnotations = clazz.getDeclaredAnnotations();
@@ -63,13 +43,11 @@ public class BeanLoader {
                 if (componentTypes.contains(annotation.annotationType())) {
                     String beanName = clazz.getSimpleName();
                     beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
-
                     result.put(beanName, clazz);
+                    System.out.println("create " + beanName + " - " + clazz.getName());
                 }
             }
         }
-
-        System.out.println("Component Class size = " + result.size());
         return result;
     }
 
@@ -86,6 +64,7 @@ public class BeanLoader {
                         try {
                             Object instance = method.invoke(componentClasses.get(key).newInstance());
                             result.put(method.getName(), instance.getClass());
+                            System.out.println("create " + method.getName() + " - " + method.getReturnType());
                         } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
                             e.printStackTrace();
                         }
@@ -93,8 +72,6 @@ public class BeanLoader {
                 }
             }
         }
-
-        System.out.println("Bean size = " + result.size());
         return result;
     }
 
@@ -110,7 +87,4 @@ public class BeanLoader {
         return this.beanClasses;
     }
 
-    public Class<?>[] getAllClasses() {
-        return this.allClasses;
-    }
 }

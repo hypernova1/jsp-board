@@ -1,7 +1,7 @@
 package spring;
 
 import spring.core.BeanLoader;
-import spring.core.DependencyInject;
+import spring.core.DependencyManager;
 import spring.core.BeanContainer;
 
 import javax.servlet.ServletContextEvent;
@@ -12,10 +12,10 @@ import javax.servlet.annotation.WebListener;
 public class SpringListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        System.out.println("hello servlet!");
+        System.out.println("hello my spring!");
         BeanLoader.getInstance();
         BeanContainer.getInstance();
-        DependencyInject.getInstance().execute();
+        DependencyManager.getInstance().injection();
     }
 
     @Override

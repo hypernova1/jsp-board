@@ -7,19 +7,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public class DependencyInject {
+public class DependencyManager {
 
     private BeanLoader beanLoader = BeanLoader.getInstance();
     private BeanContainer beanContainer = BeanContainer.getInstance();
 
-    private static DependencyInject instance;
+    private static DependencyManager instance;
 
-    public static DependencyInject getInstance() {
-        if (instance == null) instance = new DependencyInject();
+    public static DependencyManager getInstance() {
+        if (instance == null) instance = new DependencyManager();
         return instance;
     }
 
-    public void execute() {
+    public void injection() {
 
         Map<String, Class<?>> componentClasses = beanLoader.getComponentClasses();
         Map<String, Class<?>> controllerClasses = beanLoader.getControllerClasses();

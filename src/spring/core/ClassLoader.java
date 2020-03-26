@@ -1,4 +1,4 @@
-package spring.reflect;
+package spring.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,11 +8,11 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
-public class ClassReflect {
+public class ClassLoader {
 
     public static Class<?>[] getClasses(String packageName) throws ClassNotFoundException {
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        java.lang.ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         assert classLoader != null;
         String path = packageName.replace(".", "/");

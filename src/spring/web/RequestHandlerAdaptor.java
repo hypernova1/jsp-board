@@ -1,5 +1,6 @@
-package spring.dispatcher;
+package spring.web;
 
+import spring.common.Converter;
 import spring.view.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class RequestHandlerAdaptor {
+public class RequestHandlerAdaptor implements HandlerAdaptor {
 
     private static RequestHandlerAdaptor instance;
 
@@ -20,7 +21,7 @@ public class RequestHandlerAdaptor {
         return instance;
     }
 
-    public String execute(Map<String, Object> target, HttpServletRequest request, HttpServletResponse response) {
+    public String handle(Map<String, Object> target, HttpServletRequest request, HttpServletResponse response) {
 
         Model model = null;
 
