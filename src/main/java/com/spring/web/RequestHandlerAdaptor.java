@@ -1,20 +1,21 @@
 package com.spring.web;
 
 import com.spring.common.Converter;
+import com.spring.common.PrimitiveWrapper;
 import com.spring.view.Model;
+import com.sun.beans.finder.PrimitiveWrapperMap;
 
+import javax.lang.model.type.PrimitiveType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.util.*;
 
 public class RequestHandlerAdaptor implements HandlerAdaptor {
 
     private static RequestHandlerAdaptor instance;
 
+    private List<Class<?>> wrapperType = Arrays.asList(Boolean.class, Byte.class,  Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class);
     private RequestHandlerAdaptor() {}
 
     public static RequestHandlerAdaptor getInstance() {
@@ -52,8 +53,16 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
                     continue;
                 }
             }
+            if (wrapperType.contains(parameter.getType())) {
+                Object autoBoxingValue = PrimitiveWrapper.autoBoxing(parameter.getType(), request.getParameter(parameter.getName()));
+                parameterList.add(autoBoxingValue);
+                continue;
+            }
             if (parameter.getType().isPrimitive()) {
-                parameterList.add(request.getParameter(parameter.getName()));
+                String parameterType = parameter.getType().getSimpleName();
+                Class<?> type = PrimitiveWrapperMap.getType(parameterType);
+                Object autoBoxingValue = PrimitiveWrapper.autoBoxing(type, request.getParameter(parameter.getName()));
+                parameterList.add(autoBoxingValue);
                 continue;
             }
             Object objParameter = converter.execute(request, parameter.getType());
@@ -62,17 +71,15 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
 
         Object result = null;
         try {
-            result = method.invoke(instance, parameterList.toArray(new Object[0]));
+            result = method.invoke(instance, parameterList.toArray());
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-
         if (!Objects.isNull(model)) {
             setParameterForModel(model, request);
         }
 
         return result.toString();
-
     }
 
     private void setParameterForModel(Model model, HttpServletRequest request) {

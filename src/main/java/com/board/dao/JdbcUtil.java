@@ -9,7 +9,7 @@ import java.util.List;
 public class JdbcUtil {
 
     private final String driver = "com.mysql.cj.jdbc.Driver";
-    private final String url = "jdbc:mysql://localhost:3306/board2";
+    private final String url = "jdbc:mysql://localhost:3306/board";
     private final String user = "root";
     private final String password = "1111";
 
@@ -35,7 +35,7 @@ public class JdbcUtil {
     public int insert(String sql, List<String> params) {
 
         int result = 0;
-        try (PreparedStatement ps = conn.prepareStatement(sql);) {
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             for (int i = 1; i <= params.size(); i++) {
                 ps.setString(i, params.get(i - 1));

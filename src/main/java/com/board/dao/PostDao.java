@@ -13,7 +13,7 @@ public class PostDao {
     private JdbcUtil jdbcUtil = null;
 
     public PostDao() {
-        this.jdbcUtil = jdbcUtil.getInstance();
+        this.jdbcUtil = JdbcUtil.getInstance();
     }
 
     public static PostDao getInstance() {

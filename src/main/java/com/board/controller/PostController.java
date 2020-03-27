@@ -28,9 +28,9 @@ public class PostController {
     }
 
     @GetMapping("/view")
-    public String getName(int seq, Model model) {
-
-        System.out.println(seq);
+        public String getName(Post post, Model model) {
+        System.out.println(post.getSeq());
+        System.out.println(post.getTitle());
 //        Post post = postService.selectOne(seq);
 //        model.setAttribute("post", post);
         return "post/view";
