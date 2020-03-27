@@ -2,4 +2,4 @@
 target/
 out/
 .DS_Store
-board.iml
+*.iml
