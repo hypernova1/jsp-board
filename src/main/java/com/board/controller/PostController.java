@@ -21,7 +21,6 @@ public class PostController {
 
     @RequestMapping("/list")
     public String getList(Model model) {
-        System.out.println(1111);
         List<Post> postList = postService.selectAll();
         model.setAttribute("postList", postList);
         return "post/list";

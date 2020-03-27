@@ -1,10 +1,5 @@
 package com.spring.web;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 public class ViewResolver {
 
     private String prefix;
@@ -16,22 +11,14 @@ public class ViewResolver {
         this.suffix = suffix;
     }
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            if (path.equals("")) path = "error/404";
-            if (path.startsWith("redirect:")) {
-                path = path.replace("redirect:", "");
-                response.sendRedirect(path);
-                return;
-            }
-
-            request.getRequestDispatcher(prefix + path + suffix).include(request, response);
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
-        }
+    public String getPath() {
+        if (path.equals("")) return "error/404";
+        if (path.contains("redirect:")) return path;
+        return prefix + path + suffix;
     }
 
     public void setPath(String path) {
         this.path = path;
     }
+
 }
