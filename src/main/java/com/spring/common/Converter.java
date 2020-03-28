@@ -1,12 +1,8 @@
 package com.spring.common;
 
-import com.sun.beans.finder.PrimitiveWrapperMap;
-
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Enumeration;
 
 public class Converter<T> {
@@ -34,7 +30,7 @@ public class Converter<T> {
                         Object castValue;
                         if (setterParam.isPrimitive()) {
                             String parameterType = setterParam.getSimpleName();
-                            Class<?> type = PrimitiveWrapperMap.getType(parameterType);
+                            Class<?> type = PrimitiveWrapper.getType(parameterType);
                             castValue = PrimitiveWrapper.autoBoxing(type, parameter);
                         } else {
                             castValue = setterParam.cast(parameter);

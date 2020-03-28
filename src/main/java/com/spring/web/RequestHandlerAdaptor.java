@@ -3,7 +3,6 @@ package com.spring.web;
 import com.spring.common.Converter;
 import com.spring.common.PrimitiveWrapper;
 import com.spring.view.Model;
-import com.sun.beans.finder.PrimitiveWrapperMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +61,7 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
             }
             if (parameter.getType().isPrimitive()) {
                 String parameterType = parameter.getType().getSimpleName();
-                Class<?> type = PrimitiveWrapperMap.getType(parameterType);
+                Class<?> type = PrimitiveWrapper.getType(parameterType);
                 Object autoBoxingValue = PrimitiveWrapper.autoBoxing(type, request.getParameter(parameter.getName()));
                 parameterList.add(autoBoxingValue);
                 continue;
