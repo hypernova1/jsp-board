@@ -1,5 +1,6 @@
 package com.spring.web;
 
+import com.spring.annotation.RequestBody;
 import com.spring.common.Converter;
 import com.spring.common.PrimitiveWrapper;
 import com.spring.view.Model;
@@ -38,7 +39,11 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
         Converter<?> converter = new Converter<>();
         Parameter[] parameters = method.getParameters();
         List<Object> parameterList = new ArrayList<>();
+
+        boolean existRequestBody = false;
         for (Parameter parameter : parameters) {
+            if (parameter.getDeclaredAnnotation(RequestBody.class) != null) existRequestBody = true;
+
             if (parameter.getType().equals(Model.class)) {
                 model = new Model();
                 parameterList.add(model);
@@ -66,7 +71,8 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
                 parameterList.add(autoBoxingValue);
                 continue;
             }
-            Object objParameter = converter.execute(request, parameter.getType());
+
+            Object objParameter = converter.execute(request, parameter.getType(), existRequestBody);
             parameterList.add(objParameter);
         }
 
