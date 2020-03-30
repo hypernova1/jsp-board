@@ -19,11 +19,11 @@
 * Annotation
     * @Controller
     * @RequestMapping (@GetMapping, @PostMapping 등..)
+    * @RequestBody, @ResponseBody
     
 
 ## 구현 예정인 기능들
 * @PathVariable
-* Jackson을 사용한 @RequestBody, @ResponseBody
 * ResponseEntity
 * 예외처리
 
