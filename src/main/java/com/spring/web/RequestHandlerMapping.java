@@ -1,5 +1,7 @@
 package com.spring.web;
 
+import com.spring.annotation.ResponseBody;
+import com.spring.annotation.component.RestController;
 import com.spring.annotation.mapping.GetMapping;
 import com.spring.annotation.mapping.PostMapping;
 import com.spring.annotation.mapping.PutMapping;
@@ -15,6 +17,7 @@ import java.util.*;
 public class RequestHandlerMapping implements HandlerMapping {
 
     private List<Class<?>> mappingNames = Arrays.asList(RequestMapping.class, GetMapping.class, PostMapping.class, PutMapping.class);
+    private List<Class<?>> restAnnotations = Arrays.asList(ResponseBody.class, RestController.class);
     private BeanContainer beanContainer;
 
     private static RequestHandlerMapping instance;
@@ -29,9 +32,10 @@ public class RequestHandlerMapping implements HandlerMapping {
     }
 
     public Map<String, Object> getHandler(HttpServletRequest request) {
-
         String requestPath = request.getPathInfo();
         String requestMethod = request.getMethod();
+
+        boolean isRestApi = false;
 
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -41,7 +45,6 @@ public class RequestHandlerMapping implements HandlerMapping {
         }
 
         Map<String, Object> controllers = beanContainer.getControllerMap();
-
         Set<String> keys = controllers.keySet();
 
         for (String key : keys) {
@@ -51,6 +54,11 @@ public class RequestHandlerMapping implements HandlerMapping {
             String mappingMethod = null;
 
             if (requestMappingOnClass != null) {
+
+                Annotation[] declaredAnnotations = controllers.get(key).getClass().getDeclaredAnnotations();
+
+                isRestApi = confirmRestAnnotation(declaredAnnotations);
+
                 mappingPath = requestMappingOnClass.value();
                 mappingPath = mappingPath.startsWith("/") ? mappingPath : "/" + mappingPath;
 
@@ -80,13 +88,28 @@ public class RequestHandlerMapping implements HandlerMapping {
                 }
 
                 if (requestPath.equals(mappingPath) && requestMethod.equals(mappingMethod)) {
+                    if (!isRestApi) {
+                        Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
+                        isRestApi = confirmRestAnnotation(declaredAnnotations);
+                    }
+
                     resultMap.put("method", method);
                     resultMap.put("instance", controllers.get(key));
+                    resultMap.put("isRestApi", isRestApi);
                     return resultMap;
                 }
             }
         }
         return null;
+    }
+
+    private boolean confirmRestAnnotation(Annotation[] declaredAnnotations) {
+        for (Annotation annotation : declaredAnnotations) {
+            if (restAnnotations.contains(annotation.annotationType())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Annotation getRequestMappingOnClass(Class<?> controller) {

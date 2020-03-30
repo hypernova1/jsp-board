@@ -1,5 +1,7 @@
 package com.spring.web;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.annotation.RequestBody;
 import com.spring.common.Converter;
 import com.spring.common.PrimitiveWrapper;
@@ -7,6 +9,8 @@ import com.spring.view.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,9 +20,12 @@ import java.util.*;
 public class RequestHandlerAdaptor implements HandlerAdaptor {
 
     private static RequestHandlerAdaptor instance;
+    private final ObjectMapper objectMapper;
 
     private List<Class<?>> wrapperType = Arrays.asList(Boolean.class, Byte.class,  Short.class, Integer.class, Long.class, Float.class, Double.class, Character.class);
-    private RequestHandlerAdaptor() {}
+    private RequestHandlerAdaptor() {
+        objectMapper = new ObjectMapper();
+    }
 
     public static RequestHandlerAdaptor getInstance() {
         if (instance == null) instance = new RequestHandlerAdaptor();
@@ -35,6 +42,7 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
 
         Object instance = target.get("instance");
         Method method = (Method) target.get("method");
+        boolean isRestApi = (boolean) target.get("isRestApi");
 
         Converter<?> converter = new Converter<>();
         Parameter[] parameters = method.getParameters();
@@ -79,7 +87,11 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
         Object result = null;
         try {
             result = method.invoke(instance, parameterList.toArray());
-        } catch (IllegalAccessException | InvocationTargetException e) {
+
+            System.out.println(isRestApi);
+            if (isRestApi) flushJson(response, result);
+
+        } catch (IllegalAccessException | InvocationTargetException | IOException e) {
             e.printStackTrace();
         }
         if (!Objects.isNull(model)) {
@@ -87,6 +99,16 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
         }
 
         return result.toString();
+    }
+
+    private void flushJson(HttpServletResponse response, Object result) throws IOException {
+        String json = objectMapper.writeValueAsString(result);
+        response.setContentType("application/json");
+        response.setContentLength(json.length());
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
     }
 
     private void setParameterForModel(Model model, HttpServletRequest request) {

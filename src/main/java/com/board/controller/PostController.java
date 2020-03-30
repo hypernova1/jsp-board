@@ -4,7 +4,9 @@ import com.board.domain.Post;
 import com.board.service.PostService;
 import com.spring.annotation.Autowired;
 import com.spring.annotation.RequestBody;
+import com.spring.annotation.ResponseBody;
 import com.spring.annotation.component.Controller;
+import com.spring.annotation.component.RestController;
 import com.spring.annotation.mapping.GetMapping;
 import com.spring.annotation.mapping.PostMapping;
 import com.spring.annotation.mapping.PutMapping;
@@ -13,7 +15,7 @@ import com.spring.view.Model;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/post")
 public class PostController {
 
@@ -42,11 +44,11 @@ public class PostController {
     }
 
     @PostMapping("/register")
-    public String registerPost(@RequestBody Post post) {
+    public Post registerPost(@RequestBody Post post) {
         System.out.println(post.getTitle());
         System.out.println(post.getContent());
         //postService.insert(post);
-        return "redirect:post/list";
+        return post;
     }
 
     @PutMapping("/update")
