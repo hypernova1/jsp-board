@@ -1,8 +1,7 @@
 package com.board.service;
 
-import com.board.dao.PostDao;
+import com.jpa.dao.dao.PostDao;
 import com.board.domain.Post;
-import com.board.service.PostService;
 import com.spring.annotation.component.Service;
 
 import java.util.List;
