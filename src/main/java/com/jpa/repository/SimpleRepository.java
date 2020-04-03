@@ -12,14 +12,10 @@ import java.util.Optional;
 
 public abstract class SimpleRepository<T, ID extends Number> implements JpaRepository<T, ID> {
 
-    private final String driver = "com.mysql.cj.jdbc.Driver";
-    private final String url = "jdbc:mysql://localhost:3306/board";
-    private final String user = "root";
-    private final String password = "1111";
-
     private Class<T> tClass;
 
     protected List<T> item = new ArrayList<>();
+    private final JdbcUtil jdbcUtil;
     private Connection conn = null;
 
     private String tableName;
@@ -31,13 +27,8 @@ public abstract class SimpleRepository<T, ID extends Number> implements JpaRepos
                 .getActualTypeArguments()[0];
 
         this.tableName = tClass.getSimpleName();
+        this.jdbcUtil = JdbcUtil.getInstance();
 
-        try {
-            Class.forName(driver);
-            conn = DriverManager.getConnection(url,user, password);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -86,6 +77,8 @@ public abstract class SimpleRepository<T, ID extends Number> implements JpaRepos
         String sqlValueStr = sqlValue.substring(0, sqlValue.length() - 2);
         sqlValueStr += ")";
 
+        conn = jdbcUtil.getConnection();
+
         try (PreparedStatement ps = conn.prepareStatement(sqlDeclare + sqlValueStr, Statement.RETURN_GENERATED_KEYS)) {
 
             for (int i = 1; i <= sqlValues.size(); i++) {
@@ -107,6 +100,7 @@ public abstract class SimpleRepository<T, ID extends Number> implements JpaRepos
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        jdbcUtil.closeConnection();
         return t;
     }
 

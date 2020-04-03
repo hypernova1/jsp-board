@@ -17,19 +17,31 @@ public class JdbcUtil {
 
     private static JdbcUtil instance = null;
 
-    private JdbcUtil() {
-
-        try {
-            Class.forName(driver);
-            conn = DriverManager.getConnection(url,user, password);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    private JdbcUtil() {}
 
     public static JdbcUtil getInstance() {
         if (instance == null) instance = new JdbcUtil();
         return instance;
+    }
+
+    public Connection getConnection() {
+        try {
+            Class.forName(driver);
+            if (conn == null) {
+                this.conn = DriverManager.getConnection(url, user, password);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return this.conn;
+    }
+
+    public void closeConnection() {
+        try {
+            this.conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public int insert(String sql, List<String> params) {
