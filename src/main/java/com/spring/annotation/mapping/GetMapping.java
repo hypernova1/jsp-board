@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @RequestMapping(method = HttpMethod.GET)
 public @interface GetMapping {
 
-    String value();
+    String value() default "/";
 
     HttpMethod method() default HttpMethod.GET;
 }
