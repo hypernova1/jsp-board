@@ -1,6 +1,6 @@
 package com.jpa.repository;
 
-import com.jpa.dao.JdbcUtil;
+import com.board.dao.JdbcUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

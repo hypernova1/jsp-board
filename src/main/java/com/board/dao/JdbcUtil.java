@@ -1,4 +1,4 @@
-package com.jpa.dao;
+package com.board.dao;
 
 import com.board.domain.Post;
 
