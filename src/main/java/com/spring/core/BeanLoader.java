@@ -1,6 +1,8 @@
 package com.spring.core;
 
 import com.spring.annotation.component.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -8,6 +10,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class BeanLoader {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
     private final List<Class<?>> controllerType = Arrays.asList(Controller.class, RestController.class);
@@ -44,7 +48,7 @@ public class BeanLoader {
                     String beanName = clazz.getSimpleName();
                     beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
                     result.put(beanName, clazz);
-                    System.out.println("create " + beanName + " - " + clazz.getName());
+                    logger.info("create " + beanName + " - " + clazz.getName());
                 }
             }
         }
@@ -64,7 +68,7 @@ public class BeanLoader {
                         try {
                             Object instance = method.invoke(componentClasses.get(key).newInstance());
                             result.put(method.getName(), instance.getClass());
-                            System.out.println("create " + method.getName() + " - " + method.getReturnType());
+                            logger.info("create " + method.getName() + " - " + method.getReturnType());
                         } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
                             e.printStackTrace();
                         }
