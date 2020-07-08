@@ -20,11 +20,11 @@ public class BeanContainer {
         return instance;
     }
 
-    public Object getBeanToBeanName(String beanName) {
+    public Object getBeanByName(String beanName) {
         return beanMap.get(beanName);
     }
 
-    public Object getBeanToBeanType(Class<?> type) {
+    public Object getBeanByType(Class<?> type) {
         Set<String> beanNames = beanMap.keySet();
         for (String beanName : beanNames) {
             Object bean = beanMap.get(beanName);

@@ -32,23 +32,19 @@ public class RequestHandlerMapping implements HandlerMapping {
     }
 
     public Map<String, Object> getHandler(HttpServletRequest request) {
-        String requestPath = request.getPathInfo();
         String requestMethod = request.getMethod();
 
         boolean isRestApi = false;
 
         Map<String, Object> resultMap = new HashMap<>();
 
-        requestPath = requestPath == null ? "/" : requestPath;
-        if (!requestPath.equals("/") && requestPath.endsWith("/")) {
-            requestPath = requestPath.substring(0, requestPath.length() - 1);
-        }
+        String requestPath = this.getRequestPath(request);
 
         Map<String, Object> controllers = beanContainer.getControllerMap();
         Set<String> keys = controllers.keySet();
 
         for (String key : keys) {
-            RequestMapping requestMappingOnClass = (RequestMapping) getRequestMappingOnClass(controllers.get(key).getClass());
+            RequestMapping requestMappingOnClass = (RequestMapping) this.getRequestMappingOnClass(controllers.get(key).getClass());
 
             String mappingPath = null;
             String mappingMethod = null;
@@ -57,15 +53,12 @@ public class RequestHandlerMapping implements HandlerMapping {
 
                 Annotation[] declaredAnnotations = controllers.get(key).getClass().getDeclaredAnnotations();
 
-                isRestApi = confirmRestAnnotation(declaredAnnotations);
+                isRestApi = this.isRestAnnotation(declaredAnnotations);
 
                 mappingPath = requestMappingOnClass.value();
                 mappingPath = mappingPath.startsWith("/") ? mappingPath : "/" + mappingPath;
 
-                if (requestPath.contains(mappingPath)) {
-                     requestPath = requestPath.replace(mappingPath, "");
-                     requestPath = requestPath.equals("") ? requestPath + "/" : requestPath;
-                }
+                requestPath = this.getControllerPath(requestPath, mappingPath);
             }
             Method[] methods = controllers.get(key).getClass().getDeclaredMethods();
             for (Method method : methods) {
@@ -90,7 +83,7 @@ public class RequestHandlerMapping implements HandlerMapping {
                 if (requestPath.equals(mappingPath) && requestMethod.equals(mappingMethod)) {
                     if (!isRestApi) {
                         Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
-                        isRestApi = confirmRestAnnotation(declaredAnnotations);
+                        isRestApi = this.isRestAnnotation(declaredAnnotations);
                     }
 
                     resultMap.put("method", method);
@@ -103,7 +96,24 @@ public class RequestHandlerMapping implements HandlerMapping {
         return null;
     }
 
-    private boolean confirmRestAnnotation(Annotation[] declaredAnnotations) {
+    private String getControllerPath(String requestPath, String mappingPath) {
+        if (requestPath.contains(mappingPath)) {
+             requestPath = requestPath.replace(mappingPath, "");
+             requestPath = requestPath.equals("") ? requestPath + "/" : requestPath;
+        }
+        return requestPath;
+    }
+
+    private String getRequestPath(HttpServletRequest request) {
+        String requestPath = request.getPathInfo();
+        requestPath = requestPath == null ? "/" : requestPath;
+        if (!requestPath.equals("/") && requestPath.endsWith("/")) {
+            requestPath = requestPath.substring(0, requestPath.length() - 1);
+        }
+        return requestPath;
+    }
+
+    private boolean isRestAnnotation(Annotation[] declaredAnnotations) {
         for (Annotation annotation : declaredAnnotations) {
             if (restAnnotations.contains(annotation.annotationType())) {
                 return true;
@@ -114,12 +124,12 @@ public class RequestHandlerMapping implements HandlerMapping {
 
     private Annotation getRequestMappingOnClass(Class<?> controller) {
         Annotation[] annotations = controller.getDeclaredAnnotations();
-        return getRequestMapping(annotations);
+        return this.getRequestMapping(annotations);
     }
 
     private Annotation getRequestMappingOnMethod(Method method) {
         Annotation[] annotations = method.getDeclaredAnnotations();
-        return getRequestMapping(annotations);
+        return this.getRequestMapping(annotations);
     }
 
     private Annotation getRequestMapping(Annotation[] annotations) {

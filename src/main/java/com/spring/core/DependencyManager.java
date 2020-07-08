@@ -49,17 +49,17 @@ public class DependencyManager {
         String beanName = field.getType().getSimpleName();
         beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
 
-        Object bean = beanContainer.getBeanToBeanName(beanName);
+        Object bean = beanContainer.getBeanByName(beanName);
         if (!Objects.nonNull(bean)) {
             bean = injectionToBeanType(field.getType());
         }
 
-        field.set(beanContainer.getBeanToBeanName(componentName), bean);
+        field.set(beanContainer.getBeanByName(componentName), bean);
         return true;
     }
 
     private Object injectionToBeanType(Class<?> fieldType) {
-        Object bean = beanContainer.getBeanToBeanType(fieldType);
+        Object bean = beanContainer.getBeanByType(fieldType);
         if (bean == null) {
             bean = injectionToBeanType(fieldType.getSuperclass());
         }

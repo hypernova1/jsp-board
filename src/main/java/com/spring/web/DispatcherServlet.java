@@ -17,11 +17,7 @@ public class DispatcherServlet extends HttpServlet {
         RequestHandlerMapping requestHandlerMapping = RequestHandlerMapping.getInstance();
         Map<String, Object> target = requestHandlerMapping.getHandler(request);
 
-        RequestHandlerAdaptor requestHandlerAdaptor = RequestHandlerAdaptor.getInstance();
-        String viewPath = requestHandlerAdaptor.handle(target, request, response);
-        ViewResolver viewResolver = new ViewResolver("/WEB-INF/jsp/", ".jsp");
-        viewResolver.setPath(viewPath);
-        String path = viewResolver.getPath();
+        String path = this.getPath(request, response, target);
 
         if (path.startsWith("redirect:")) {
             path = path.replace("redirect:", "");
@@ -29,6 +25,14 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
         request.getRequestDispatcher(path).include(request, response);
+    }
+
+    private String getPath(HttpServletRequest request, HttpServletResponse response, Map<String, Object> target) {
+        RequestHandlerAdaptor requestHandlerAdaptor = RequestHandlerAdaptor.getInstance();
+        String viewPath = requestHandlerAdaptor.handle(target, request, response);
+        ViewResolver viewResolver = new ViewResolver("/WEB-INF/jsp/", ".jsp");
+        viewResolver.setPath(viewPath);
+        return viewResolver.getPath();
     }
 
 }
