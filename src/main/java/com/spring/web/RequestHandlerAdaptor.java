@@ -1,6 +1,5 @@
 package com.spring.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.annotation.RequestBody;
 import com.spring.common.Converter;

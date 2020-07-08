@@ -13,9 +13,6 @@ public class BeanLoader {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
-    private final List<Class<?>> controllerType = Arrays.asList(Controller.class, RestController.class);
-
     private Class<?>[] allClasses = new Class[0];
     private Map<String, Class<?>> controllerClasses = new HashMap<>();
     private Map<String, Class<?>> componentClasses = new HashMap<>();
@@ -25,10 +22,13 @@ public class BeanLoader {
 
     private BeanLoader() {
         try {
+            List<Class<?>> controllerType = Arrays.asList(Controller.class, RestController.class);
+            List<Class<?>> componentTypes = Arrays.asList(Component.class, Service.class, Configuration.class);
+
             allClasses = ClassLoader.getClasses("com.board");
-            this.controllerClasses = this.initComponentClasses(controllerType);
-            this.componentClasses = this.initComponentClasses(componentTypes);
-            this.beanClasses = this.initBeanMethods();
+            this.controllerClasses = this.initClassBeans(controllerType);
+            this.componentClasses = this.initClassBeans(componentTypes);
+            this.beanClasses = this.initMethodBeans();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -39,44 +39,60 @@ public class BeanLoader {
         return instance;
     }
 
-    private Map<String, Class<?>> initComponentClasses(List<Class<?>> componentTypes) {
+    private Map<String, Class<?>> initClassBeans(List<Class<?>> componentTypes) {
         Map<String, Class<?>> result = new HashMap<>();
         for (Class<?> clazz : allClasses) {
-            Annotation[] declaredAnnotations = clazz.getDeclaredAnnotations();
-            for (Annotation annotation : declaredAnnotations) {
-                if (componentTypes.contains(annotation.annotationType())) {
-                    String beanName = clazz.getSimpleName();
-                    beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
-                    result.put(beanName, clazz);
-                    logger.info("create " + beanName + " - " + clazz.getName());
-                }
-            }
+            findAndCreateClassBeans(componentTypes, result, clazz);
         }
         return result;
     }
 
-    private Map<String, Class<?>> initBeanMethods() {
+    private Map<String, Class<?>> initMethodBeans() {
         Map<String, Class<?>> result = new HashMap<>();
 
         Set<String> keys = componentClasses.keySet();
         for (String key : keys) {
             Method[] declaredMethods = componentClasses.get(key).getDeclaredMethods();
             for (Method method : declaredMethods) {
-                Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
-                for (Annotation annotation : declaredAnnotations) {
-                    if (annotation.annotationType().equals(Bean.class)) {
-                        try {
-                            Object instance = method.invoke(componentClasses.get(key).newInstance());
-                            result.put(method.getName(), instance.getClass());
-                            logger.info("create " + method.getName() + " - " + method.getReturnType());
-                        } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                findAndCreateMethodBeans(result, key, method);
             }
         }
         return result;
+    }
+
+    private void findAndCreateClassBeans(List<Class<?>> componentTypes, Map<String, Class<?>> result, Class<?> clazz) {
+        Annotation[] declaredAnnotations = clazz.getDeclaredAnnotations();
+        for (Annotation annotation : declaredAnnotations) {
+            if (componentTypes.contains(annotation.annotationType())) {
+                createClassBean(result, clazz);
+            }
+        }
+    }
+
+    private void findAndCreateMethodBeans(Map<String, Class<?>> result, String key, Method method) {
+        Annotation[] declaredAnnotations = method.getDeclaredAnnotations();
+        for (Annotation annotation : declaredAnnotations) {
+            if (annotation.annotationType().equals(Bean.class)) {
+                createBean(result, key, method);
+            }
+        }
+    }
+
+    private void createClassBean(Map<String, Class<?>> result, Class<?> clazz) {
+        String beanName = clazz.getSimpleName();
+        beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+        result.put(beanName, clazz);
+        logger.info("create " + beanName + " - " + clazz.getName());
+    }
+
+    private void createBean(Map<String, Class<?>> result, String key, Method method) {
+        try {
+            Object instance = method.invoke(componentClasses.get(key).newInstance());
+            result.put(method.getName(), instance.getClass());
+            logger.info("create " + method.getName() + " - " + method.getReturnType());
+        } catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
     }
 
     public Map<String, Class<?>> getComponentClasses() {
