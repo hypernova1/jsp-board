@@ -42,7 +42,6 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
         Method method = (Method) target.get("method");
         boolean isRestApi = (boolean) target.get("isRestApi");
 
-        Converter<?> converter = new Converter<>();
         Parameter[] parameters = method.getParameters();
         List<Object> parameterList = new ArrayList<>();
 
@@ -71,13 +70,12 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
                 continue;
             }
             if (parameter.getType().isPrimitive()) {
-                String parameterType = parameter.getType().getSimpleName();
-                Class<?> type = PrimitiveWrapper.getType(parameterType);
-                Object autoBoxingValue = PrimitiveWrapper.autoBoxing(type, request.getParameter(parameter.getName()));
+                Object autoBoxingValue = this.wrapPrimitiveValue(request, parameter);
                 parameterList.add(autoBoxingValue);
                 continue;
             }
 
+            Converter<?> converter = new Converter<>();
             Object objParameter = converter.execute(request, parameter.getType(), existRequestBody);
             parameterList.add(objParameter);
         }
@@ -101,6 +99,12 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
         return result.toString();
     }
 
+    private Object wrapPrimitiveValue(HttpServletRequest request, Parameter parameter) {
+        String parameterType = parameter.getType().getSimpleName();
+        Class<?> type = PrimitiveWrapper.getType(parameterType);
+        return PrimitiveWrapper.autoBoxing(type, request.getParameter(parameter.getName()));
+    }
+
     private void flushJson(HttpServletResponse response, Object result) throws IOException {
         String json = objectMapper.writeValueAsString(result);
         response.setContentType("application/json");
@@ -112,7 +116,6 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
     }
 
     private void setParameterForModel(Model model, HttpServletRequest request) {
-
         Field modelAttributes;
         try {
             modelAttributes = model.getClass().getDeclaredField("attributes");
@@ -127,7 +130,6 @@ public class RequestHandlerAdaptor implements HandlerAdaptor {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
 
 }

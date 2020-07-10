@@ -73,7 +73,6 @@ public class Converter<T> {
     }
 
     private Object getJsonFromObject(HttpServletRequest request, Class<?> clazz) {
-
         try {
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = request.getReader();
