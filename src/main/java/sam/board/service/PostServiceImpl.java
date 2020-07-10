@@ -10,15 +10,9 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
 
     private final PostDao postDao;
-    private static PostServiceImpl instance;
 
     public PostServiceImpl() {
         postDao = PostDao.getInstance();
-    }
-
-    public static PostServiceImpl getInstance() {
-        if (instance == null) instance = new PostServiceImpl();
-        return instance;
     }
 
     public Post selectOne(int seq) {
@@ -27,7 +21,6 @@ public class PostServiceImpl implements PostService {
 
     public List<Post> selectAll() {
         return postDao.selectAll();
-
     }
 
     public void update(Post post) {

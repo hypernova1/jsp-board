@@ -1,4 +1,4 @@
-# Mini SpringFramework
+# Sam's pring
 jsp 프로젝트로 간단한 스프링 프레임워크를 구현한다.
 
 ## 목적

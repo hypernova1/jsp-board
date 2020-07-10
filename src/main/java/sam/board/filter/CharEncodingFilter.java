@@ -18,5 +18,7 @@ public class CharEncodingFilter implements Filter {
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+
+    }
 }

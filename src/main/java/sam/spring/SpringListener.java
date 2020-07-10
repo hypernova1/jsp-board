@@ -1,10 +1,10 @@
 package sam.spring;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sam.spring.core.BeanContainer;
 import sam.spring.core.BeanLoader;
 import sam.spring.core.DependencyManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -25,6 +25,6 @@ public class SpringListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-
+        System.out.println("sam's pring.. shutdown");
     }
 }

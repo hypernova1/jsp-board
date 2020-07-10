@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.java</groupId>
-    <artifactId>mini-springframework</artifactId>
-    <name>Mini-Springframework</name>
+    <artifactId>sam-s-pring</artifactId>
+    <name>sam-s-pring</name>
     <version>1.0</version>
     <packaging>war</packaging>
     <properties>
@@ -52,8 +52,15 @@
 
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <artifactId>mockito-core</artifactId>
+            <version>3.3.3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
 

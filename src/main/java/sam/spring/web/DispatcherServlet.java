@@ -15,16 +15,14 @@ public class DispatcherServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         RequestHandlerMapping requestHandlerMapping = RequestHandlerMapping.getInstance();
         Map<String, Object> target = requestHandlerMapping.getHandler(request);
-
         String path = this.getPath(request, response, target);
         if (path == null) return;
-
         if (path.startsWith("redirect:")) {
             path = path.replace("redirect:", "");
             response.sendRedirect(path);
             return;
         }
-        request.getRequestDispatcher(path).include(request, response);
+        request.getRequestDispatcher(path).forward(request, response);
     }
 
     private String getPath(HttpServletRequest request, HttpServletResponse response, Map<String, Object> target) {
